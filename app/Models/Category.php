@@ -12,6 +12,7 @@ class Category extends Model
     use HasFactory,SoftDeletes;
     protected $dates=['deleted_at'];
     protected $fillable=[
+        'admin_id',
         'parent_id',
         'section_id',
         'categoryname',
@@ -48,7 +49,8 @@ class Category extends Model
        $breadcrumbs='<a href="'.url($catdetails['slug']).'">'.$catdetails['categoryname'].'</a>';
   }else{
       $parentcategory=Category::select('categoryname','slug')->where('id',$catdetails['parent_id'])->first()->toArray();
-    $breadcrumbs='<a href="'.url($parentcategory['slug']).'">'.$parentcategory['categoryname'].'</a>/<a href="'.url($catdetails['slug']).'">'.$catdetails['categoryname'].'</a>';
+     //  dd($parentcategory);
+      $breadcrumbs='<a href="'.url($parentcategory['slug']).'">'.$parentcategory['categoryname'].'</a>&nbsp;&nbsp;<a href="'.url($catdetails['slug']).'">'.$catdetails['categoryname'].'</a>';
 
   }
   $catIds=array();

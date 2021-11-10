@@ -3,7 +3,7 @@
 @section('content')
 <div class="span9">
     <ul class="breadcrumb">
-		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
+		<li><a href="{{ route('frontend.index') }}">Home</a> <span class="divider">/</span></li>
 		<li class="active">Orders</li>
     </ul>
 	@include('layouts.adminlayout.adminpartials.alertss')

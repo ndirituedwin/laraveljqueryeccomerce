@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 3 | Dashboard</title>
+	<meta name="csrf-token" content="{{ csrf_token() }}"/>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font Awesome -->
@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="{{asset('adminlte/adminplugins/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
   <link rel="stylesheet" href="{{asset('adminlte/adminplugins/plugins/select2/css/select2.min.css')}}">
 //
-  
+
   <!-- iCheck -->
   <link rel="stylesheet" href="{{asset('adminlte/adminplugins/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
   <!-- JQVMap -->
@@ -34,28 +34,21 @@
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
-<div class="wrapper">
+  <body class="hold-transition sidebar-mini layout-fixed" style="background-color: peru">
+    <div class="wrapper" >
 
   <!-- Navbar -->
  @include('layouts.adminlayout.adminpartials.adminheader')
   <!-- /.navbar -->
 
-  <!-- Main Sidebar Container -->
  @include('layouts.adminlayout.adminpartials.adminsidebar')
 
-  <!-- Content Wrapper. Contains page content -->
 @yield('content')
-  <!-- /.content-wrapper -->
  @include('layouts.adminlayout.adminpartials.adminfooter')
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
+  <aside class="control-sidebar control-sidebar-open">
   </aside>
-  <!-- /.control-sidebar -->
 </div>
-<!-- ./wrapper -->
 
 <!-- jQuery -->
 <script src="{{asset('adminlte/adminplugins/plugins/jquery/jquery.min.js')}}"></script>
@@ -74,16 +67,18 @@
         $('.select2').select2()
   </script>
 <!-- DataTables -->
-<script src="{{asset('adminlte/adminplugins/plugins/datatables/jquery.dataTables.js')}}"></script>
-<script src="{{asset('adminlte/adminplugins/plugins/datatables-bs4/js/dataTables.bootstrap4.js')}}"></script>
+ <script src="{{asset('adminlte/adminplugins/plugins/datatables/jquery.dataTables.js')}}"></script>
+ <script src="{{asset('adminlte/adminplugins/plugins/datatables-bs4/js/dataTables.bootstrap4.js')}}"></script>
 <script>
   $(function () {
     $("#sections").DataTable();
+    jQuery("#userstablee").DataTable();
     $("#categories").DataTable();
     $("#products").DataTable();
     $("#attributes").DataTable();
     $("#brands").DataTable();
-    
+    $("#cmspages").DataTable();
+    $("#adminstablee").DataTable();
   });
 </script>
 <!-- ChartJS -->

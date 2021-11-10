@@ -73,6 +73,7 @@ class UsersController extends Controller
     public function clientlogout()
     {
         Auth::logout();
+        Session::flush();
         return redirect()->route('frontend.index')->withdanger('you are signed out');
     }
     public function getloginuser()
@@ -208,6 +209,7 @@ class UsersController extends Controller
     }
     public function forgotpassword()
     {
+       // dd("dd");
         $getsections=Section::with('categories')->where('status', 1)->get();
         return view('Frontend.Auth.forgotpassword')->withsections($getsections);
     }
@@ -236,7 +238,7 @@ class UsersController extends Controller
                 $message->to($email)->subject('New password');
             });
             return back()->withinfo('please check your email for a new password');
-        
+
             return back()->withsuccess("password updated successfully");
         }
         return back()->withdanger("That email does not exist");

@@ -7,7 +7,6 @@
                           <img src="{{asset('adminlte/adminimages/images/adminproducts/small/'.$product['productimage'])}}" alt="{{$product['productname']}}">
                      @else
                      <img src="{{asset('adminlte/adminimages/noimage/noimage.jpg')}}" alt="{{$product['productimage']}}">
-
                           @endif
       </div>
       <div class="span4">

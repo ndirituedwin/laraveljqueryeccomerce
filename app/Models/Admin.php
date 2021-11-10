@@ -12,7 +12,6 @@ class Admin extends Authenticable
     use HasFactory, SoftDeletes,Notifiable;
     protected $guard='admin';
     protected $fillable=[
-
         'name',
         'type',
         'mobile',

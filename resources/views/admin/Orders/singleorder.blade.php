@@ -179,7 +179,9 @@ use App\Models\Product;
                                             </tr>
                                             <tr>
                                                 <td >Country</td>
-                                                <td>{{$customerdetails['country']['country_name']}}</td>
+                                                @if (!empty($customerdetails['country']['country_name']))
+                                                <td>{{$customerdetails['country']['country_name']}}</td>          
+                                                @endif
                                             </tr>
                                             <tr>
                                                 <td >pincode</td>
@@ -212,24 +214,41 @@ use App\Models\Product;
                                                 <td colspan="2 {{$errors->has('order_status')?' has-error':''}}">
                                                     <input type="hidden" name="order_id" value="{{$orders['id']}}" >
 
-                                                    <select name="order_status"  class="form-control">
+                                                    <select name="order_status"  class="form-control" id="orderstatusses">
                                                         <option value="" >Select status</option>
                                                         @foreach ($orderstatuses as $orderstatus)
                                                             <option value="{{$orderstatus['name']}}"@if ($orders['orderstatus']==$orderstatus['name'])
                                                                 selected
                                                             @endif>{{$orderstatus['name']}}</option>
                                                         @endforeach
-                                                    </select>
+                                                    </select><br>
                                                     @if ($errors->has('order_status'))
                                                         <span class="help-block text-danger">{{$errors->first('order_status')}}</span>
-                                                    @endif
+                                                    @endif &nbsp;&nbsp;
+                                                    <input style="width: 120px;" value="{{isset($orders['courier_name'])?$orders['courier_name']:''}}" type="text" name="couriername" @if(empty($orders['courier_name'])) id="couriername" @endif placeholder="Courier name"/>
+                                                    <input style="width: 120px;" value="{{isset($orders['tracking_number'])?$orders['tracking_number']:''}}" type="text" name="trackingnumber" @if(empty($orders['tracking_number'])) id="trackingnumber" @endif placeholder="tracking number"/>
                                                 </td>
                                                 <td>
+                                                    
                                                     <button type="submit" class="btn btn-default">Update</button>
 
                                                 </td>
 
                                             </tr>
+                                                   <th colspan="2" style="color: green">Status</th><th colspan="2" style="color: green">Date</th>
+                                                    @foreach ($orderlogs as $logs)
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <strong>{{$logs['order_status']}}</strong>
+                                                            
+                                                        </td>
+                                                        <td>
+                                                            <strong>{{date('F j, Y, g:i a',strtotime($logs['created_at']))}}</strong>
+
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                    
                                         </form>
                                           
                                            
@@ -240,6 +259,7 @@ use App\Models\Product;
                                      </div>
                                     </div>
                           </div>
+                          
                       </div>
                     </div>
                     
@@ -291,10 +311,7 @@ use App\Models\Product;
           </div>
           <!-- /.card -->
 
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title">DataTable with default features</h3>
-            </div>
+          
 
           <!-- /.card -->
         </div>

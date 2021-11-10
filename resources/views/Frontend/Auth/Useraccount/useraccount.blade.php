@@ -6,10 +6,10 @@
 		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
 		<li class="active">Login</li>
     </ul>
-	<h3> Login/Sign up</h3>	
+	<h3> Login/Sign up</h3>
 	@include('layouts.adminlayout.adminpartials.alertss')
 	<hr class="soft"/>
-	
+
 	<div class="row">
 		<div class="span4">
 			<div class="well">
@@ -21,7 +21,7 @@
                     <label for="first_name" class="control-label" >First Name</label>
                     <div class="controls">
                       <input class="span3"  type="text" value="{{Request::old('first_name')?:Auth::user()->first_name}}" id="first_name" name="first_name" placeholder="first name">
-					  
+
                     </div>@if ($errors->has('first_name'))
 					  <span class="help-block text-danger"><font color="red">{{$errors->first('first_name')}}</font></span>
 				  @endif
@@ -34,7 +34,7 @@
 					  <span class="help-block text-danger"><font color="red">{{$errors->first('last_name')}}</font></span>
 				  @endif
 					</div>
-					
+
                   </div>
                   <div class="control-group{{$errors->has('email')?' has-error  text-danger':''}}">
                     <label class="control-label" for="email">email</label>
@@ -74,7 +74,7 @@
                         @if ($errors->has('city'))
                       <span class="help-block text-danger"><font color="red">{{$errors->first('city')}}</font></span>
                   @endif <br>
-                 
+
                     </div>
                   </div>
                   <div class="control-group{{$errors->has('state')?' has-error  text-danger':''}}">
@@ -84,11 +84,11 @@
                         @if ($errors->has('state'))
                       <span class="help-block text-danger"><font color="red">{{$errors->first('state')}}</font></span>
                   @endif <br>
-                 
+
                     </div>
                   </div>
-                     
-                     
+
+
 			  <div class="control-group{{$errors->has('coutry')?' has-error  text-danger':''}}">
 				<label class="control-label" for="country">country</label>
 				<div class="controls">
@@ -96,18 +96,18 @@
                         <option value="0">Select</option>
                          @foreach ($countries as $country)
                          <option value="{{$country['id']}}" @if (isset(Auth::user()->country_id)&&Auth::user()->country_id==$country['id'])
-                           
-                            selected 
+
+                            selected
                          @endif>{{$country['country_name']}}</option>
                          @endforeach
                     </select>
                     @if ($errors->has('country'))
 				  <span class="help-block text-danger"><font color="red">{{$errors->first('country')}}</font></span>
 			  @endif <br>
-			 
+
 				</div>
 			  </div>
-                 
+
 			  <div class="control-group{{$errors->has('pincode')?' has-error  text-danger':''}}">
 				<label class="control-label" for="pincode">pincode</label>
 				<div class="controls">
@@ -115,7 +115,7 @@
                     @if ($errors->has('pincode'))
 				  <span class="help-block text-danger"><font color="red">{{$errors->first('pincode')}}</font></span>
 			  @endif <br>
-			 
+
 				</div>
 			  </div>
               <div>
@@ -138,8 +138,8 @@
                       <span class="help-block text-danger"><font color="red">{{$errors->first('currentpassword')}}</font></span>
                   @endif <br>
                   <span id="currentpass"></span>
-                 
-                    </div>
+
+                  </div>
                   </div>
                   <div class="control-group">
                     <label class="control-label" for="newpassword">newpassword</label>
@@ -148,7 +148,7 @@
                         @if ($errors->has('newpassword'))
                       <span class="help-block text-danger"><font color="red">{{$errors->first('newpassword')}}</font></span>
                   @endif <br>
-                 
+
                     </div>
                   </div>
                   <div class="control-group">
@@ -159,7 +159,7 @@
                       <span class="help-block text-danger"><font color="red">{{$errors->first('confirmpassword')}}</font></span>
                   @endif <br>
                   <span id="confirmpass"></span>
-                 
+
                     </div>
                     <div class="">
                         <button class="btn btn-default">Update password</button>
@@ -168,7 +168,7 @@
             </form>
 		</div>
 		</div>
-	</div>	
-	
+	</div>
+
 </div>
 @endsection

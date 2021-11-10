@@ -1,6 +1,6 @@
-<div id="sidebar" class="span3">
+<div id="sidebar" class="span3" style="height: 700px;overflow: scroll;" >
     <div class="well well-small"><a id="myCart" href="{{ route('cart.show') }}"><img src="{{asset('frontend/themes/images/ico-cart.png')}}" alt="cart"><span class="ttcartitems">{{TotalCartItems()}}{{Str::plural('item',TotalCartItems())}}</span> in your cart</a></div>
-    <ul id="sideManu" class="nav nav-tabs nav-stacked">
+    <ul id="sideManu" class="nav nav-tabs nav-stacked" style="background-color: crimson">
       @if (!empty($sections))
       @foreach ($sections as $section)
       <li class="subMenu"><a>{{$section->section}}</a>
@@ -21,10 +21,11 @@
       </li>
       @endforeach
       @endif
-       
+
     </ul>
     <br>
-    @if (isset($listing) && $listing=="listing")
+
+    @if (isset($listing) && $listing=="listing" &&  !isset($_REQUEST['search']))
         <div class="well well-small">
             <h5>Fabric</h5>
             @foreach ($fabrics as $fabric)
@@ -68,11 +69,5 @@
             @endforeach
         </div>
     @endif
-    <br/>
-    <div class="thumbnail">
-        <img src="{{asset('frontend/themes/images/payment_methods.png')}}" title="Payment Methods" alt="Payments Methods">
-        <div class="caption">
-            <h5>Payment Methods</h5>
-        </div>
-    </div>
+
 </div>

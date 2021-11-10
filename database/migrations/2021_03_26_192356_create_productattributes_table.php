@@ -18,7 +18,7 @@ class CreateProductattributesTable extends Migration
             $table->bigInteger('product_id');
             $table->string('size');
             $table->float('price');
-            $table->string('stock');
+            $table->bigInteger('stock');
             $table->string('sku');
             $table->tinyInteger('status');
             $table->softDeletes();

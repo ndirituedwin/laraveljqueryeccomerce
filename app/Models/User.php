@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements ShouldQueue
 {
     use HasFactory, Notifiable,SoftDeletes;
 
@@ -23,7 +24,7 @@ class User extends Authenticatable
         'address',
         'city',
         'state',
-        'country_id',
+       // 'country_id',
         'pincode',
         'mobile',
         'status',

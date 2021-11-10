@@ -27,10 +27,7 @@
           <div class="card-header">
             <h3 class="card-title">Products form</h3>
                 @include('layouts.adminlayout.adminpartials.alerts')
-            <div class="card-tools">
-              <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-              <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
-            </div>
+
           </div>
           <!-- /.card-header -->
           <form action="{{ route('product.post') }}" method="POST" role="form" enctype="multipart/form-data">
@@ -52,7 +49,7 @@
                               @foreach ($category->subcategories as $subcategory)
                               <option value="{{$subcategory->id}}" @if (!empty(@old('category')) && @old('category')==$subcategory->id)
                                 selected=""
-                            @endif  style="background-color: rgb(9, 0, 128)"> &nbsp; &nbsp; &nbsp;&raquo;{{$subcategory->categoryname}}</option>       
+                            @endif  style="background-color: rgb(9, 0, 128)"> &nbsp; &nbsp; &nbsp;&raquo;{{$subcategory->categoryname}}</option>
                               @endforeach
                           @endif
                           @endforeach
@@ -69,7 +66,7 @@
                       <span class="help-block text-danger">{{$errors->first('productname')}}</span>
                   @endif
                   </div>
-                 
+
               </div>
               <div class="col-md-6">
                 <div class="div"></div>
@@ -80,17 +77,17 @@
                     @foreach ($brands as $brand)
                        <option value="{{$brand->id}}" @if (!empty(@old('brand')) && @old('brand')==$brand->id)
                         selected
-                    @endif >{{$brand->brand}}</option>                          
+                    @endif >{{$brand->brand}}</option>
                     @endforeach
                   </select>
                   @if ($errors->has('brand'))
                   <span class="help-block text-danger">{{$errors->first('brand')}}</span>
               @endif
-              </div>   
+              </div>
               </div>
               <!-- /.col -->
               <div class="col-md-6">
-                
+
                 <div class="form-grop{{$errors->has('productcode')?' has-error text-danger':''}}">
                   <label for="productcode" class="control-label">product code</label>
                   <input type="text" name="productcode" value="{{Request::old('productcode')}}" id="productcode" class="form-control" placeholder="enter a productcode">
@@ -106,7 +103,7 @@
             @endif
             </div>
               </div>
-             
+
 
               <div class="col-md-6">
                 <div class="form-grop{{$errors->has('productprice')?' has-error text-danger':''}}">
@@ -118,16 +115,16 @@
               </div>
               <div class="form-grop{{$errors->has('productdiscount')?' has-error text-danger':''}}">
                 <label for="productdiscount" class="control-label">product discount (%)</label>
-                <input type="number" name="productdiscount" value="{{Request::old('productdiscount')}}" id="productdiscount" class="form-control" placeholder="enter a product discount">
+                <input type="number" name="productdiscount" value="{{((Request::old('productdiscount'))?Request::old('productdiscount'):'0.00')}}" id="productdiscount" class="form-control" placeholder="enter a product discount">
                 @if ($errors->has('productdiscount'))
                 <span class="help-block text-danger">{{$errors->first('productdiscount')}}</span>
             @endif
             </div>
               </div>
               <div class="col-md-6">
- 
+
                 <div class="form-grop{{$errors->has('productweight')?' has-error text-danger':''}}">
-                  <label for="productweight" class="control-label">product weight</label>
+                  <label for="productweight" class="control-label">product weight(gms)</label>
                   <input type="text" name="productweight" value="{{Request::old('productweight')}}" id="productweight" class="form-control" placeholder="enter a productweight">
                   @if ($errors->has('productweight'))
                   <span class="help-block text-danger">{{$errors->first('productweight')}}</span>
@@ -181,9 +178,9 @@
                   </div>
 
                   <div class="form-group{{$errors->has('pattern')?' has-error text-danger':''}}">
-                    <label for="pattern">pattern</label>
+                    <label for="pattern">Sleeve</label>
                      <select name="pattern" id="pattern" class="form-control">
-                       <option value="">pattern</option>
+                       <option value="">Sleeve</option>
                        @foreach ($patterns as $pattern)
                        <option value="{{$pattern}}">{{$pattern}}</option>
                        @endforeach
@@ -192,14 +189,14 @@
                         <span class="help-block text-danger">{{$errors->first('pattern')}}</span>
                     @endif
                   </div>
-             
+
                 </div>
                 <div class="col-md-6">
 
                   <div class="form-group{{$errors->has('sleeve')?' has-error text-danger':''}}">
-                    <label for="sleeve">sleeve</label>
+                    <label for="sleeve">pattern</label>
                      <select name="sleeve" id="sleeve" class="form-control">
-                       <option value="">sleeve</option>
+                       <option value="">pattern</option>
                        @foreach ($sleeves as $sleeve)
                        <option value="{{$sleeve}}">{{$sleeve}}</option>
                        @endforeach
@@ -221,7 +218,7 @@
                         <span class="help-block text-danger">{{$errors->first('fit')}}</span>
                     @endif
                   </div>
-               
+
                 </div>
                 <div class="col-md-6">
 
@@ -238,43 +235,50 @@
                         <span class="help-block text-danger">{{$errors->first('occassion')}}</span>
                     @endif
                   </div>
-                  <div class="form-group{{$errors->has('metattitle')?' has-error text-danger':''}}">   
+                  <div class="form-group{{$errors->has('groupcode')?' has-error text-danger':''}}">
+                    <label for="groupcode">Group code</label>
+                    <input type="text" name="groupcode" value="{{Request::old('groupcode')}}" id="groupcode" class="form-control" placeholder="enter groupcode">
+                    @if ($errors->has('groupcode'))
+                        <span class="help-block text-danger">{{$errors->first('groupcode')}}</span>
+                    @endif
+                  </div>
+                  <div class="form-group{{$errors->has('metattitle')?' has-error text-danger':''}}">
                   <label for="metattitle">metattitle</label>
                   <textarea name="metattitle" id="metattitle"  rows="2" class="form-control">{{Request::old('metattitle')}}</textarea>
                   @if ($errors->has('occassion'))
                   <span class="help-block text-danger">{{$errors->first('occassion')}}</span>
               @endif
                 </div>
-                
+
                 </div>
                 <div class="col-md-6">
 
-                  <div class="form-group{{$errors->has('metadescription')?' has-error text-danger':''}}">   
+                  <div class="form-group{{$errors->has('metadescription')?' has-error text-danger':''}}">
                     <label for="metadescription">meta description</label>
                     <textarea name="metadescription" id="metadescription"  rows="2" class="form-control">{{Request::old('metadescription')}}</textarea>
                     @if ($errors->has('metadescription'))
                     <span class="help-block text-danger">{{$errors->first('metadescription')}}</span>
                 @endif
                   </div>
-                  <div class="form-group{{$errors->has('metakeyword')?' has-error text-danger':''}}">   
+                  <div class="form-group{{$errors->has('metakeyword')?' has-error text-danger':''}}">
                     <label for="metakeyword">meta keyword</label>
                     <textarea name="metakeyword" id="metakeyword"  rows="2" class="form-control">{{Request::old('metakeyword')}}</textarea>
                     @if ($errors->has('metakeyword'))
                     <span class="help-block text-danger">{{$errors->first('metakeyword')}}</span>
                 @endif
                   </div>
-                  <div class="form-group{{$errors->has('featured')?' has-error text-danger':''}}">   
+                  <div class="form-group{{$errors->has('featured')?' has-error text-danger':''}}">
                     <label for="featured">
                       <input type="checkbox" name="featured" id="featured" value="1">featured
                     </label>
                   </div>
                 </div>
-            
+
               <!-- /.col -->
             </div>
             <!-- /.row -->
 
-           
+
           </div>
           <!-- /.card-body -->
           <div class="card-footer">
@@ -284,7 +288,7 @@
         </div>
         <!-- /.card -->
 
-       
+
         <!-- /.row -->
       </div><!-- /.container-fluid -->
     </section>

@@ -30,7 +30,7 @@ class Posteditproductrequest extends FormRequest
             'productcode'=>'required|regex:/^[\w-]*$/',
             'productcolor'=>'required|string|max:255',
             'productprice'=>'required|numeric',
-            'productdiscount'=>'required|numeric',
+            'productdiscount'=>'nullable|numeric',
             'productweight'=>'required|string|max:255',
             'productimage'=>'nullable|image|max:1999',
             'productdescription'=>'nullable|max:1000',

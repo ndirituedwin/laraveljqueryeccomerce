@@ -62,8 +62,16 @@
                      <td>{{$order['orderstatus']}}</td>
                      <td>{{$order['paymentmethod']}}</td>
                      <td>
-                       <a href="{{ route('orders.getsingle', $ordr['id']) }}" title="View Order Details" class="fas fa-file"></a>&nbsp;
-                                 </td>
+                      <a href="{{ route('orders.getsingle', $order['id']) }}" title="View Order Details" class="fas fa-file"></a>&nbsp;
+                        @if ($order['orderstatus']=="Shipped"|| $order['orderstatus']=="Delivered")
+                        <a target="_blank" href="{{ route('vieworder.invoice', $order['id']) }}" title="Print order invoice" class="fas fa-print"></a>&nbsp;
+
+                        @endif
+                        @if ($order['orderstatus']=="Shipped"|| $order['orderstatus']=="Delivered")
+                        <a target="_blank" href="{{ route('printorder.pdf', $order['id']) }}" title="Print order pdf" class="fas fa-file-pdf"></a>&nbsp;
+
+                        @endif
+                    </td>
                  </tr>
                  @endforeach
                        
@@ -75,13 +83,7 @@
           </div>
           <!-- /.card -->
 
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title">DataTable with default features</h3>
-            </div>
-
-          <!-- /.card -->
-        </div>
+         
         <!-- /.col -->
       </div>
       <!-- /.row -->

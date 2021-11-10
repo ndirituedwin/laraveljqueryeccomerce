@@ -15,6 +15,7 @@ class CreateCouponsTable extends Migration
     {
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
+            
             $table->string('couponoption');
             $table->string('couponcode');
             $table->text('categories');

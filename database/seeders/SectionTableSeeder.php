@@ -17,16 +17,19 @@ class SectionTableSeeder extends Seeder
     {
         $sectiontableseeder=[
             [
+                'admin_id'=>1,
                 'section'=>'Men',
                 'slug'=>Str::slug('name'),
                 'status'=>1
             ],
             [
+                'admin_id'=>2,
                 'section'=>'Women',
                 'slug'=>Str::slug('women'),
                 'status'=>1
             ],
             [
+                'admin_id'=>1,
                 'section'=>'Kids',
                 'slug'=>Str::slug('Kids'),
                 'status'=>1

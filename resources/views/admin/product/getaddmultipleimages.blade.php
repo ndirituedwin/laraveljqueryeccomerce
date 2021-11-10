@@ -50,7 +50,7 @@
                   </div>
                       <div class="form-grop{{$errors->has('productcode')?' has-error text-danger':''}}">
                   <label for="productcode" class="control-label">product code</label>
-                  <input type="text" readonly name="productcode" value="{{Request::old('productcode')?:$product->productcode}}" id="productcode" class="form-control" placeholder="enter a productcode">
+                  <input type="text" readonly name="productcode" value="{{Request::old('productcode')?:$product->productcode}}"  id="productcode" class="form-control" placeholder="enter a productcode">
                   @if ($errors->has('productcode'))
                   <span class="help-block text-danger">{{$errors->first('productcode')}}</span>
               @endif

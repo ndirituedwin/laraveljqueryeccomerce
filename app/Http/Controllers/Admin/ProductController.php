@@ -15,6 +15,7 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\postproductrequest;
 use App\Http\Requests\Posteditproductrequest;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -29,9 +30,9 @@ class ProductController extends Controller
 
         //$products=json_decode(json_encode($products),true);
         //dd($products);
-       
+
         return view('admin.product.displayproducts')
-    
+
         ->withproducts($products);
     }
     public function getaddproducts()
@@ -55,6 +56,7 @@ class ProductController extends Controller
     }
     public function addproducts(postproductrequest $request)
     {
+
       //  dd($request->brand);
    // dd($request);
         $image=$request->file('productimage');
@@ -84,15 +86,19 @@ class ProductController extends Controller
         } else {
             $productimage="";
         }
-
-
         if (!empty($request->featured)) {
             $featured="1";
         }
         $featured=0;
-        $categorydetails=Category::find($request->category);
 
+        if(empty($request['productdiscount'])){
+            $productdiscount=0.0;
+        }
+            $productdiscount=$request['productdiscount'];
+
+        $categorydetails=Category::find($request->category);
         Product::create([
+           'admin_id'=>Auth::guard('admin')->user()->id,
             'section_id'=>$categorydetails->section_id,
             'category_id'=>$request->category,
             'productname'=>$request->productname,
@@ -100,8 +106,9 @@ class ProductController extends Controller
             'brand_id'=>$request->brand,
             'productcode'=>$request->productcode,
             'productcolor'=>$request->productcolor,
+            'groupcode'=>$request->groupcode,
             'productprice'=>$request->productprice,
-            'productdiscount'=>$request->productdiscount,
+            'productdiscount'=>$productdiscount,
             'productweight'=>$request->productweight,
             'productimage'=>$productimage,
             'productdescription'=>$request->productdescription,
@@ -146,9 +153,7 @@ class ProductController extends Controller
     }
     public function deleteproduct($id)
     {
-        //dd($id);
-        Product::where('id', $id)->delete();
-        return back()->withsuccess('product  trashed');
+
     }
     public function editproducts($id)
     {
@@ -157,7 +162,7 @@ class ProductController extends Controller
         // dd($product);
 
 
-  
+
         $brands=Brand::where('status',1)->get();
 
 
@@ -182,13 +187,21 @@ class ProductController extends Controller
     }
     public function posteditproduct(Posteditproductrequest $request, $id)
     {
-      //   dd($id);
 
-      $productexists=Product::where('productname',$request->productname)->where('id','!=',$id)->get()->toArray();
-       if($productexists){
-           return back()->withdanger('that product has already been taken');
-       }
-        $image=$request->file('productimage');
+        //dd(json_decode(json_encode(Product::all())));
+        //dd(Product::where('productname',$request['productname'])->first()->toArray());
+        //first check to see if the product already exists befor editing
+        $productcount=Product::where('productname',$request['productname'])->where('id','!=',$id)->count();
+    //    $productcount=Product::where('productname',$request['productname'])->get()->toArray()/*->where('id','!=',$id)->count()*/;
+      //  dd($productcount);
+          //if count is greater than zero
+      if($productcount>0){
+          return back()->withdanger('Product name already exists, choose another name');
+      }
+
+
+      //    dd("you can now add");
+          $image=$request->file('productimage');
         if ($request->hasFile('productimage')) {
             $filenamexactt=$request->file('productimage')->getClientOriginalName();
             $filename=pathinfo($filenamexactt, PATHINFO_FILENAME);
@@ -204,16 +217,22 @@ class ProductController extends Controller
             Image::make($image)->resize(100, 150)->save($small);
                  Product::where('id', $id)->update(['productimage'=>$filenametostore]);
         }
-     
- 
+
+
         if (!empty($request->featured)) {
             $featured=1;
         } else {
             $featured=0;
         }
+
         $categorydetails=Category::find($request->category);
-        
+        if(empty($request['productdiscount'])){
+            $productdiscount=0;
+        }
+            $productdiscount=$request->productdiscount;
+
         Product::Where('id', $id)->update([
+         'admin_id'=>Auth::guard('admin')->user()->id,
         'section_id'=>$categorydetails->section_id,
         'category_id'=>$request->category,
         'productname'=>$request->productname,
@@ -221,8 +240,9 @@ class ProductController extends Controller
         'brand_id'=>$request->brand,
         'productcode'=>$request->productcode,
         'productcolor'=>$request->productcolor,
+        'groupcode'=>$request->groupcode,
         'productprice'=>$request->productprice,
-        'productdiscount'=>$request->productdiscount,
+        'productdiscount'=>$productdiscount,
         'productweight'=>$request->productweight,
         //'productimage'=>$productimage,
         'productdescription'=>$request->productdescription,
@@ -248,7 +268,7 @@ class ProductController extends Controller
         $imagepathlarge='adminlte/adminimages/images/adminproducts/large/';
         $imagepathmedium='adminlte/adminimages/images/adminproducts/medium/';
         $imagepathsmall='adminlte/adminimages/images/adminproducts/small/';
- 
+
         //delete category image from category image folder
         if (file_exists($imagepathlarge.$productimage->productimage)) {
             //dd($imagepath.$productimage->productimage);
@@ -272,7 +292,7 @@ class ProductController extends Controller
     public function getaddattribute($id)
     {
         $productget=Product::select('id','productname','productcode','productcolor','productimage')->with('attributes')->find($id);
-     //   dd($productget);
+     //dd($productget);
         return view('admin.attribute.getaddattribute')->withproduct($productget);
     }
     public function postattribute(Request $request, $id)
@@ -284,6 +304,10 @@ class ProductController extends Controller
                 $skucount=Productattribute::where(['sku'=>$value])->count();
                 if($skucount>0){
                     return back()->withdanger('sku already exists');
+                }
+                $sizecount=Productattribute::where(['size'=>$data['size'],'product_id'=>$id])->count();
+                if($sizecount>0){
+                    return back()->withdanger('size is already taken choose another one');
                 }
                 $sizecount=Productattribute::where(['size'=>$data['size'],'product_id'=>$id])->count();
                 if($sizecount>0){
@@ -322,7 +346,7 @@ class ProductController extends Controller
       //  dd($id);
         Productattribute::where('id',$id)->delete();
         return back()->withsuccess('product  attribute trashed');
-  
+
     }
     public function updateattributestatus(Request $request){
         if($request->ajax()){
@@ -338,8 +362,8 @@ class ProductController extends Controller
 
     }
     public function getaddmultipleimages($id){
-        $productdata=Product::with('productimages')->select('id','productname','productcolor','productimage')->find($id);
-     //   dd(json_decode(json_encode($productdata)));
+        $productdata=Product::with('productimages')->select('id','productcode','productname','productcolor','productimage')->find($id);
+        //dd(json_decode(json_encode($productdata)));
 
         return view('admin.product.getaddmultipleimages')->withproduct($productdata);
     }
@@ -349,11 +373,11 @@ class ProductController extends Controller
      /*  $this->validate($request,[
            'image'=>'image|max:1999',
        ]);*/
-      
+
             // dd($id);
             if ($request->hasFile('image')) {
                 $image=$request->file('image');
-          
+
                 foreach($image as $key=>$imagee){
                      $productmultiple=new Productimage();
                      $img=Image::make($imagee);
@@ -377,18 +401,18 @@ class ProductController extends Controller
                      $productmultiple->save();
                 }
                 return back()->withinfo('image saved');
-                       
+
             }
             return redirect()->back()->withsuccess('no file chosen');
-    
-    
-           
+
+
+
 
 
     }
     public function deleteproductimagemultiple($id){
         Productimage::where('id',$id)->delete();
         return back()->withsuccess('product image   trashed');
-  
+
     }
 }

@@ -15,6 +15,9 @@ class AddBrandIdToProductsTable extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             $table->bigInteger('brand_id')->after('section_id');
+            $table->index('brand_id');
+            $table->foreign('brand_id')->references('id')->on('brands')->onDelete('restrict')->onUpdate('no action');
+
         });
     }
 
@@ -26,7 +29,7 @@ class AddBrandIdToProductsTable extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropbrand_id();
+            $table->dropColumn('brand_id');
         });
     }
 }

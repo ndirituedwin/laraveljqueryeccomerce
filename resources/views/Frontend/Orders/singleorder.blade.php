@@ -27,6 +27,16 @@ use App\Models\Product;
                     <td>Order Status</td>
                     <td>{{$orders['orderstatus']}}</td>
                 </tr>
+                  @if(!empty($orders['courier_name'])&& !empty($orders['tracking_number']))
+                  <tr>
+                    <td>Courier name</td>
+                    <td>{{$orders['courier_name']}}</td>
+                </tr>
+                <tr>
+                    <td>Tracking  number</td>
+                    <td>{{$orders['tracking_number']}}</td>
+                </tr>
+                  @endif
                 <tr>
                     <td>Order Total</td>
                     <td>{{$orders['grandtotal']}}</td>

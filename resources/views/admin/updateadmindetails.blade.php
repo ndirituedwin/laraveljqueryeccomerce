@@ -37,7 +37,7 @@
                   @csrf
                   <div class="card-body">
                     <div class="form-group">
-                       
+
                       <label for="email">Email address</label>
                       <input type="email" class="form-control" name="email" value="{{ Auth::guard('admin')->user()->email}}" id="email" readonly>
                     </div>
@@ -63,8 +63,8 @@
                       <label for="image" class="control-label">Image</label>
                       <input type="file" name="image"  id="image"  placeholder="password again" class="form-control"><br>
                       @if (!empty(Auth::guard('admin')->user()->image))
-                      <img src="/storage/adminlte/adminimages/images/{{Auth::guard('admin')->user()->image}}" alt="" style="border-radius: 20%; width: 40px,height:40px">
-                          
+                      <img style="width: 200px;height:150px"   src="/storage/adminlte/adminimages/images/{{Auth::guard('admin')->user()->image}}" alt="" >
+
                       @endif
                       @if ($errors->has('image'))
                       <span class="help-block text-danger">{{$errors->first('image')}}</span>
@@ -72,26 +72,26 @@
                     </div>
                   </div>
                   <!-- /.card-body -->
-  
+
                   <div class="card-footer">
                     <button type="submit" class="btn btn-primary">Submit</button>
                   </div>
                 </form>
               </div>
               <!-- /.card -->
-  
-             
-  
-  
-             
-             
+
+
+
+
+
+
             </div>
-          
+
           </div>
           <!-- /.row -->
         </div><!-- /.container-fluid -->
       </section>
       <!-- /.content -->
   </div>
-    
+
 @endsection

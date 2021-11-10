@@ -27,10 +27,7 @@
         <div class="card-header">
           <h3 class="card-title">Coupons form</h3>
               @include('layouts.adminlayout.adminpartials.alerts')
-          <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-            <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
-          </div>
+         
         </div>
         <!-- /.card-header -->
         <form action="{{ route('coupon.edit',$coupon['id']) }}" method="POST" role="form" enctype="multipart/form-data">

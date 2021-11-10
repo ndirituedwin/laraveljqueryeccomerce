@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class OrdersController extends Controller
 {
     public function getuserorders(){
-        
+     //   dd("A");
         $userorders=Order::with('orders_products')->where('user_id',Auth::user()->id)->orderBy('id','DESC')->get()->toArray();
        // dd($userorders);
         $getsections=Section::with('categories')->where('status',1)->get();

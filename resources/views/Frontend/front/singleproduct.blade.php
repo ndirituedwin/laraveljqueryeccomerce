@@ -20,18 +20,18 @@ use App\Models\Product;
                         @if (!empty($product['productimages']))
                         @foreach ($product['productimages'] as $productimages)
                         <a href="{{asset('adminlte/adminimages/images/adminproducts/large/'.$productimages['image'])}}"> <img style="width:29%" src="{{asset('adminlte/adminimages/images/adminproducts/large/'.$productimages['image'])}}" alt=""/></a>
-                        @endforeach    
-                        @else  
-                        empty 
+                        @endforeach
+                        @else
+                        <span>This Product Does Not have other images</span>
                         @endif
                              </div>
                     <div class="item">
                         @if (!empty($product['productimages']))
                          @foreach ($product['productimages'] as $productimages)
                          <a href="{{asset('adminlte/adminimages/images/adminproducts/large/'.$productimages['image'])}}"> <img style="width:29%" src="{{asset('adminlte/adminimages/images/adminproducts/large/'.$productimages['image'])}}" alt=""/></a>
-                         @endforeach 
+                         @endforeach
                          @else
-                         empty  
+                         <span>This product does not have other image</span>
                         @endif
                       </div>
                 </div>
@@ -40,25 +40,29 @@ use App\Models\Product;
                 <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
                 -->
             </div>
-            
-            <div class="btn-toolbar">
-                <div class="btn-group">
-                    <span class="btn"><i class="icon-envelope"></i></span>
-                    <span class="btn" ><i class="icon-print"></i></span>
-                    <span class="btn" ><i class="icon-zoom-in"></i></span>
-                    <span class="btn" ><i class="icon-star"></i></span>
-                    <span class="btn" ><i class=" icon-thumbs-up"></i></span>
-                    <span class="btn" ><i class="icon-thumbs-down"></i></span>
-                </div>
-            </div>
         </div>
+
         <div class="span6">
             <h3>{{$product['productname']}}  </h3>
             <small>{{$product['brand']['brand']}}</small>
             <hr class="soft"/>
             <small >{{$sumofstock}} items in stock</small>
-      
+
             @include('layouts.adminlayout.adminpartials.alertss')
+            @if (count($groupproducts)>0)
+            <div class="panel" >
+                 <div class="panel-heading"><strong>More Colors</strong></div>
+                 <div>
+                     @foreach ($groupproducts as $item)
+                     <a href="{{ route('singlepro.getdetails',$item['slug']) }}">
+
+                         <img style="height: 100px;width: 70px;" src="{{asset('adminlte/adminimages/images/adminproducts/small/'.$item['productimage'])}}" alt="{{$item['productname']}}">
+                     </a>
+                     @endforeach
+                 </div>
+             </div>
+
+            @endif
             <form action="{{ route('addproduct.tocart') }}" method="post" class="form-horizontal qtyFrm">
               @csrf
                 <input type="hidden" name="productid" value="{{$product['id']}}">
@@ -72,50 +76,64 @@ use App\Models\Product;
                         <del>Kshs/={{$product['productprice']}}</del>
                             @else
                             {{$product['productprice']}}
-                        @endif 
+                        @endif
                        </h4>
-                        <select required class="span2 pull-left" name="size" id="getsize" product_id="{{$product['id']}}" slug="{{$product['slug']}}">
+                        <select  class="span2 pull-left" name="size" id="getsize" product_id="{{$product['id']}}" slug="{{$product['slug']}}">
                             <option value="">Select</option>
                             @if (!empty($product['attributes']))
                             @foreach ($product['attributes'] as $attribute)
                             <option value="{{$attribute['size']}}">{{$attribute['size']}}</option>
-  
-                            @endforeach  
+
+                            @endforeach
                             @endif
-                           
-                            
+
+
                         </select>
-                        <input type="number" name="quantity" class="span1" placeholder="Qty." required/>
+
+                        <input type="number"  name="quantity" class="span1" placeholder="Qty." />
                         <button type="submit" class="btn btn-large btn-primary pull-right"> Add to cart <i class=" icon-shopping-cart"></i></button>
+                       <div style="margin-top: 5%">
+                        <label for="deliver">Enter delivery pincode</label>
+                        <input type="text"  name="delievrypincode" id="enterpincode"  placeholder="test"/>
+                        <button type="button" class="btn btn-sm bg-transparent" id="checkpincode">Check</button>
+                       </div>
+
                     </div>
                 </div>
+
             </form>
-        
+
+                {{-- <label for="delivery"  ><span style="margin-left: 10px">Enter delivery pincode</span></label>
+                <input type="text"  style="margin-left: 10px" name="delievrypincode" id="enterpincode"  placeholder="test"/>
+                <button class="btn btn-sm bg-transparent" id="checkpincode">Check</button> --}}
+
+
+
             <hr class="soft clr"/>
             <p class="span6">
-               {{$product['productdescription'] }}                
+               {{$product['productdescription'] }}
             </p>
-            <a class="btn btn-small pull-right" href="#detail">More Details</a>
             <br class="clr"/>
             <a href="#" name="detail"></a>
             <hr class="soft"/>
         </div>
-        
+
+
         <div class="span9">
             <ul id="productDetail" class="nav nav-tabs">
                 <li class="active"><a href="#home" data-toggle="tab">Product Details</a></li>
                 <li><a href="#profile" data-toggle="tab">Related Products</a></li>
             </ul>
-            <div id="myTabContent" class="tab-content">
+            <div id="myTabContent" class="tab-content" style="background-color: chocolate">
                 <div class="tab-pane fade active in" id="home">
                     <h4>Product Information</h4>
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-condensed table-responsive table-hover">
                         <tbody>
                             <tr class="techSpecRow"><th colspan="2">Product Details</th></tr>
                             <tr class="techSpecRow"><td class="techSpecTD1">Brand: </td><td class="techSpecTD2">{{$product['brand']['brand']}}</td></tr>
                             <tr class="techSpecRow"><td class="techSpecTD1">Code:</td><td class="techSpecTD2">{{$product['productcode']}}</td></tr>
                             @if (!empty($product['productcolor']))
-                            <tr class="techSpecRow"><td class="techSpecTD1">Color:</td><td class="techSpecTD2">{{$product['productcolor']}}</td></tr>       
+                            <tr class="techSpecRow"><td class="techSpecTD1">Color:</td><td class="techSpecTD2">{{$product['productcolor']}}</td></tr>
                             @endif
                             @if (!empty($product['fabric']))
                             <tr class="techSpecRow"><td class="techSpecTD1">Fabric:</td><td class="techSpecTD2">{{$product['fabric']}}</td></tr>
@@ -133,71 +151,34 @@ use App\Models\Product;
                             @if (!empty($product['occassion']))
                             <tr class="techSpecRow"><td class="techSpecTD1">occassion:</td><td class="techSpecTD2">{{$product['occassion']}}</td></tr>
                             @endif
+                            @if (!empty($product['washcare']))
+                            <tr class="techSpecRow"><td class="techSpecTD1">Washcare:</td><td class="techSpecTD2">{{$product['washcare']}}</td></tr>
+                            @endif
+
+
 
                         </tbody>
                     </table>
-                    
-                    <h5>Washcare</h5>
-                    <p>{{$product['washcare']}}</p>
-                    
+
+
                 </div>
                 <div class="tab-pane fade" id="profile">
                     <div id="myTab" class="pull-right">
-                        <a href="#listView" data-toggle="tab"><span class="btn btn-large"><i class="icon-list"></i></span></a>
-                        <a href="#blockView" data-toggle="tab"><span class="btn btn-large btn-primary"><i class="icon-th-large"></i></span></a>
+                        <a href="#listView" data-toggle="tab"></a>
+                        <a href="#blockView" data-toggle="tab"></a>
                     </div>
                     <br class="clr"/>
                     <hr class="soft"/>
                     <div class="tab-content">
-                        <div class="tab-pane" id="listView">
-                            @if (!empty($relatedproducts))
-                                @foreach ($relatedproducts as $product)
-                                <div class="row">
-                                    <div class="span2">
 
-                                        <?php $smallpath='adminlte/adminimages/images/adminproducts/small/'.$product['productimage']?>
-                                        @if (!empty($product['productimage']) && file_exists($smallpath))
-                                            <img src="{{asset('adminlte/adminimages/images/adminproducts/small/'.$product['productimage'])}}" alt="{{$product['productname']}}">
-                                       @else
-                                       <img src="{{asset('adminlte/adminimages/noimage/noimage.jpg')}}" alt="{{$product['productimage']}}">
-                    
-                                            @endif                                    </div>
-                                    <div class="span4">
-                                        <h3>New | Available</h3>
-                                        <hr class="soft"/>
-                                        <h5>{{$product['productname']}} </h5>
-                                        <h5>{{$product['productcode']}} </h5>
-                                        <p>
-                                          {{$product['productdescription']}}
-                                        </p>
-                                        <a class="btn btn-small pull-right" href="{{ route('singlepro.getdetails',$product['slug']) }}">View Details</a>
-                                        <br class="clr"/>
-                                    </div>
-                                    <div class="span3 alignR">
-                                        <form class="form-horizontal qtyFrm">
-                                            <h3> Rs.1000</h3>
-                                            <label class="checkbox">
-                                                <input type="checkbox">  Add products to compare
-                                            </label><br/>
-                                            <div class="btn-group">
-                                                <a href="product_details.html" class="btn btn-large btn-primary"> Add to <i class=" icon-shopping-cart"></i></a>
-                                                <a href="product_details.html" class="btn btn-large"><i class="icon-zoom-in"></i></a>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                                <hr class="soft"/>
-                                @endforeach
-                            @endif
-                        </div>
-                        <div class="tab-pane active" id="blockView">
+                        <div class="tab-pane active" id="blockView" >
                             <ul class="thumbnails">
                                 @if (!empty($relatedproducts))
                                 @foreach ($relatedproducts as $product)
                                 <li class="span3">
                                     <div class="thumbnail">
                                         <a href="{{ route('singlepro.getdetails',$product['slug']) }}">
-                                            
+
                     <?php $smallpath='adminlte/adminimages/images/adminproducts/small/'.$product['productimage']?>
                     @if (!empty($product['productimage']) && file_exists($smallpath))
                         <img src="{{asset('adminlte/adminimages/images/adminproducts/small/'.$product['productimage'])}}" alt="{{$product['productname']}}">
@@ -211,17 +192,18 @@ use App\Models\Product;
                                             <p>
                                                {{$product['productdescription']}}
                                             </p>
-                                            <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">Ksh/={{$product['productprice']}}</a></h4>
+                                            <h4 style="text-align:center"><a class="btn btn-primary" href="#">Ksh/={{$product['productprice']}}</a></h4>
                                         </div>
                                     </div>
                                 </li>
-                      
+
                                 @endforeach
                                  @endif
-                                  
+
                             </ul>
                             <hr class="soft"/>
                         </div>
+
                     </div>
                     <br class="clr">
                 </div>

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Addcategoryrequest;
 use App\Http\Requests\categoryposteditrequest;
 use App\Http\Requests\Postcategoryrequest;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -37,40 +38,53 @@ class CategoryController extends Controller
         return response()->json(['status'=>$status,'category_id'=>$request['category_id']]);
 
     }
-   
+
 }
  public function getaddcategory(){
      $getsections=Section::all();
         return view('admin.category.addcategory')->withsections($getsections);
     }
     public function addcategory(Postcategoryrequest $request){
-       if($request->hasFile('categoryimage')){
+    //  $categorycount=Category::where('categoryname',$request['categoryname'])->count();
+
+      if($request->hasFile('categoryimage')){
          $filenameext=$request->file('categoryimage')->getClientOriginalName();
           $filename=pathinfo($filenameext,PATHINFO_FILENAME);
                 $filenameext=$request->file('categoryimage')->getClientOriginalExtension();
-      
+
             $filenametostore=$filename.'.'.time().'.'.$filenameext;
             $path=$request->file('categoryimage')->move('adminlte/adminimages/images/admincategories',$filenametostore);
           $categoryimage=$filenametostore;
         }else{
           $categoryimage="";
         }
+        if(empty($request->categoryundescription)){
+          $categorydescription="null";
+          //dd($request['categorydescription']);
+        }else{
+          $categorydescription=$request['categorydescription'];
+        }
+
 
         Category::create([
-            'parent_id'=>$request->parent,
+
+       'admin_id'=>Auth::guard('admin')->user()->id,
+          'parent_id'=>$request->parent,
             'section_id'=>$request->sections,
             'categoryname'=>$request->categoryname,
             'slug'=>Str::slug($request->categoryname),
            'categoryimage'=>$categoryimage,
             'categorydiscount'=>$request->categorydiscount,
-            'description'=>$request->categorydescription,
+            'description'=>$categorydescription,
             'url'=>$request->categoryurl,
             'metatitle'=>$request->metatitle,
             'metadescription'=>$request->metadescription,
-            'metakeywords'=>$request->metakeyword,            
-            'status'=>1,            
+            'metakeywords'=>$request->metakeyword,
+            'status'=>1,
         ]);
+
         return redirect()->route('admin.categories')->withsuccess('category saved');
+
     }
     public function updateadmincategories(Request $request){
         if($request->ajax()){
@@ -82,10 +96,11 @@ class CategoryController extends Controller
            // echo"<pre>";print_r($getcategories);die;
              return view('admin.category.appendcategorylevels')->withgetcategories($getcategories);
         }
-     
+
     }
     public function geteditcategory($id){
     //dd($slug);
+    //dd($request->all());
     $categories=array();
     $getcats=array();
       $categories=Category::where('id',$id)->first();
@@ -116,18 +131,19 @@ class CategoryController extends Controller
             //get just ext
               $filenameext=$request->file('categoryimage')->getClientOriginalExtension();
             //  dd($filenameext);
-  
+
               //filenmae to store
               $filenametostore=$filename.'.'.time().'.'.$filenameext;
               $path=$request->file('categoryimage')->move('adminlte/adminimages/images/admincategories',$filenametostore);
             //dd($path);
           //  $categoryimage=$filenametostore;
             Category::where('id', $id)->update(['categoryimage'=>$filenametostore]);
-              
+
          /* }else{
             $categoryimage="";
         */  }
         Category::where('id',$id)->update([
+            'admin_id'=>Auth::guard('admin')->user()->id,
           'parent_id'=>$request->parent,
           'section_id'=>$request->sections,
           'categoryname'=>$request->categoryname,
@@ -138,9 +154,9 @@ class CategoryController extends Controller
           'url'=>$request->categoryurl,
           'metatitle'=>$request->metatitle,
           'metadescription'=>$request->metadescription,
-          'metakeywords'=>$request->metakeyword,            
-          'status'=>1,            
-        ]); 
+          'metakeywords'=>$request->metakeyword,
+          'status'=>1,
+        ]);
         return redirect()->route('admin.categories')->withsuccess('category updated');
     }
     public function deletecategoryimage($id){

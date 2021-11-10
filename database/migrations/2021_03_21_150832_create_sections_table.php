@@ -15,11 +15,15 @@ class CreateSectionsTable extends Migration
     {
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('admin_id')->unsigned();
             $table->string('section');
             $table->string('slug');
             $table->tinyInteger('status');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
+            $table->index('admin_id');
+           $table->foreign('admin_id')->references('id')->on('admins')->onDelete('restrict')->onUpdate('no action');
+
         });
     }
 

@@ -6,12 +6,14 @@ use App\Models\Banner;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ShippingCharge;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Session;
 
 class BannersController extends Controller
 {
     public function getbanners(){
+       // dd(ShippingCharge::all());
         Session::put('page','banners');
         $allbanners=Banner::all()->toArray();
         return view('admin.banners.getbanners')->withbanners($allbanners);

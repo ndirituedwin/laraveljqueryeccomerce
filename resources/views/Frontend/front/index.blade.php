@@ -101,7 +101,7 @@
                     </h4>
 
                     <h4 style="text-align:center">
-                        <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">
+                        {{-- <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#"> --}}
                             @if ($productdicountedprice > 0)
                             <del>Kshs{{$featured['productprice']}}</del>
                             <font color="yellow">Kshs{{$featured['productprice']}}</font>

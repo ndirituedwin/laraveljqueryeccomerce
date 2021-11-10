@@ -19,4 +19,6 @@
 <?php
  Session::forget('grandtotall');
  Session::forget('order_id');
+ Session::forget('couponcode');
+Session::forget('couponamount');
 ?>

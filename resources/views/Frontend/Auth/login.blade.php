@@ -45,7 +45,7 @@
             </div><br>
 			  <div class="control-group">
 				<div class="controls">
-				  <button type="submit" class="btn">Sign in</button> <a href="{{ route('password.forgot') }}">Forget password?</a>
+				  <button type="submit" class="btn">Sign in</button> <a href="{{ route('password.forgot') }}">Forgot password?</a>
 				</div>
 			  </div>
 			</form>

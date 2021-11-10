@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use HasFactory,SoftDeletes;
+   use HasFactory,SoftDeletes;
     protected $dates=['deleted_at'];
    protected $fillable=[
 
@@ -24,6 +24,8 @@ class Order extends Model
     'shippingcharges',
     'couponcode',
     'couponamount',
+    'tracking_number',
+    'courier_name',
     'orderstatus',
     'paymentmethod',
     'paymentgateway',

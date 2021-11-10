@@ -176,6 +176,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
     ],
 
@@ -230,8 +231,23 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
 
     ],
+    'debug_blacklist'=>[
+        '_ENV'=>[
+            
+            'MPESA_CONSUMER_KEY',
+            'MPESA_CONSUMER_SECRET',
+            'MPESA_SHORTCODE',
+            'MPESA_STK_SHORTCODE',
+            'MPESA_ENV',
+            'MPESA_TEST_MSISON',
+            'MPESA_TEST_URL',
+            'MPESA_PASSKEY',
+            'MPESA_B2C_PASSWORD'
+        ]
+    ]
 
 ];

@@ -18,16 +18,28 @@ use Illuminate\Support\Facades\Session;
 class CartController extends Controller
 {
     public function addproducttocart(Request $request){
+        $this->validate($request,[
+            'size'=>'required|String|max:50',
+            'quantity'=>'required|numeric',
+        ]);
+       // dd($request->all());
+       if($request['quantity']<=0 || $request['quantity']==''){
+           $request['quantity']=1;
+       }
               $doesstockexist=Productattribute::where(['product_id'=>$request['productid'],'size'=>$request['size']])->first()->toArray();
-                $available=$doesstockexist['stock']; 
+                $available=$doesstockexist['stock'];
+                if($request['quantity']<=0){
+                    return back()->withdanger('quantity may not be less than or equals to zero ');
+
+                }
                 if($request['quantity'] > $available){
                     return back()->withdanger('quantity may not be greater than there is available '.$doesstockexist['stock']);
-                } 
+                }
               $session_id=Session::get('session_id');
               if(empty($session_id)){
                   $session_id=Session::getId();
                   Session::put('session_id',$session_id);
-              } 
+              }
            /*   $cartcount=Cart::where(['product_id'=>$request['productid'],'size'=>$request['size']])->count();
               if($cartcount>0){
                   return back()->withdanger('cart item already exists');
@@ -36,10 +48,10 @@ class CartController extends Controller
 
             if(Auth::check()){
                 $cartcount=Cart::where(['product_id'=>$request['productid'],'size'=>$request['size'],'user_id'=>Auth::user()->id])->count();
-                 
+
             }else{
                 $cartcount=Cart::where(['product_id'=>$request['productid'],'size'=>$request['size'],'session_id'=>Session::get('session_id')])->count();
- 
+
             }
             if($cartcount>0){
                 return back()->withdanger('cart item already exists');
@@ -93,15 +105,15 @@ class CartController extends Controller
                         return response()->json([
                             'status'=>false,
                             'message'=>'You cannot add more than there is available',
-                            'view'=>(String)View::make('Frontend.cart.cartitems')->withcartitems($usercartitem)]); 
-                        } 
+                            'view'=>(String)View::make('Frontend.cart.cartitems')->withcartitems($usercartitem)]);
+                        }
                         $activesize=Productattribute::where(['product_id'=>$cart['product_id'],'size'=>$cart['size'],'status'=>1])->count();
                           if($activesize==0){
                             return response()->json([
                                 'status'=>false,
                                 'message'=>'size is not active',
-                                'view'=>(String)View::make('Frontend.cart.cartitems')->withcartitems($usercartitem)]); 
-                            
+                                'view'=>(String)View::make('Frontend.cart.cartitems')->withcartitems($usercartitem)]);
+
                           }
                     Cart::where('id',$data['cartid'])->update([
                       'quantity'=>$data['qty'],
@@ -113,7 +125,17 @@ class CartController extends Controller
                         'view'=>(String)View::make('Frontend.cart.cartitems')->withcartitems($usercartitem)]);
                 }
             }
-            public function deletecartitemwithajax(Request $request){
+            public function deletecartitemwithajax( /*$id */Request $request){
+                // Cart::where('id',$id)->delete();
+                // $usercartitem=Cart::userCartItems();
+                //     $TotalCartItems=TotalCartItems();
+
+                //   //  return view('Frontend.cart.cartitems')->withcartitems($usercartitem);
+                //   return response()->json([
+                //     'TotalCartItems'=>$TotalCartItems,
+                //     'view'=>(String)View::make('Frontend.cart.cartitems')->withcartitems($usercartitem)]);
+
+             //   dd($id);
                 if($request->ajax()){
                     $data=$request->all();
                    // echo"<pre>";print_r($data);die;
@@ -124,10 +146,10 @@ class CartController extends Controller
 
                   //  return view('Frontend.cart.cartitems')->withcartitems($usercartitem);
                   return response()->json([
-                    'TotalCartItems'=>$TotalCartItems,  
+                    'TotalCartItems'=>$TotalCartItems,
                     'view'=>(String)View::make('Frontend.cart.cartitems')->withcartitems($usercartitem)]);
-                   
-                }
+
+                 }
             }
 
     public function applycoupon(Request $request){
@@ -141,14 +163,16 @@ class CartController extends Controller
         if(!$couponcount){
             $usercartitem=Cart::userCartItems();
             $TotalCartItems=TotalCartItems();
+            Session::forget('couponcode');
+            Session::forget('couponamount');
             return response()->json(
                 [
-                    
+
                  'status'=>false,
                 'message'=>'Invalid coupon',
-                'TotalCartItems'=>$TotalCartItems,  
+                'TotalCartItems'=>$TotalCartItems,
                 'view'=>(String)View::make('Frontend.cart.cartitems')->withcartitems($usercartitem)]);
-       
+
         }else{
            //check for other coupon conditions
           $coupondetails=Coupon::where('couponcode',$data['couponcode'])->first();
@@ -164,7 +188,7 @@ class CartController extends Controller
 
               $message="Coupon is already expired";
           }
-         
+
            //check if coupon is from selected category
            $categoryarray=explode(",",$coupondetails->categories);
            $usercartitem=Cart::userCartItems();
@@ -174,10 +198,10 @@ class CartController extends Controller
             foreach($usersemailsaray as $key=>$user){
                 $getuserids=User::select('id')->where('email',$user)->first()->toArray();
                 $userid[]=$getuserids['id'];
-            }  
+            }
         }
           //if user is supposed to get a coupon
-        
+
           $totalamount=0;
           foreach($usercartitem  as $key=>$item){
             if(!in_array($item['product']['category_id'],$categoryarray)){
@@ -199,11 +223,11 @@ class CartController extends Controller
             $couponamount=0;
             return response()->json(
                 [
-                    
+
                  'status'=>false,
                 'message'=>$message,
-                'couponamount'=>$couponamount,  
-                'TotalCartItems'=>$TotalCartItems,  
+                'couponamount'=>$couponamount,
+                'TotalCartItems'=>$TotalCartItems,
                 'view'=>(String)View::make('Frontend.cart.cartitems')->withcartitems($usercartitem)]);
 
           }else{
@@ -226,21 +250,21 @@ class CartController extends Controller
             $usercartitem=Cart::userCartItems();
             return response()->json(
                 [
-                    
+
                  'status'=>true,
                 'message'=>$message,
-                'TotalCartItems'=>$TotalCartItems,  
-                'couponamount'=>$couponamount,  
-                'grand_total'=>$grand_total,  
+                'TotalCartItems'=>$TotalCartItems,
+                'couponamount'=>$couponamount,
+                'grand_total'=>$grand_total,
                 'view'=>(String)View::make('Frontend.cart.cartitems')->withcartitems($usercartitem)]);
 
 
           }
-        
-       
-           
 
-        } 
+
+
+
+        }
         }
 
     }

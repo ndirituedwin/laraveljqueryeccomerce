@@ -1,4 +1,9 @@
 jQuery(document).ready(function(){
+    $.ajaxSetup({
+        headers:{
+          'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+        }
+      });
     jQuery("#currentpassword").keyup(function(){
         var currentpassword=jQuery("#currentpassword").val();
        // alert(password);
@@ -67,6 +72,7 @@ jQuery(document).ready(function(){
          }
      });
     });
+  
 
     //updatecategorystatus
     
@@ -107,13 +113,11 @@ jQuery(document).ready(function(){
      url:'/admin/updateproductstatus',
      data:{status:status,product_id:product_id},
      success:function(resp){
-         console.log(resp);
-       
+         console.log(resp);      
        if(resp['status']==0){
            jQuery("#product-"+product_id).html("In active");
        }else if(resp['status']==1){
         jQuery("#product-"+product_id).html("Active");
-
        }
      },
      error:function(){
@@ -170,7 +174,74 @@ jQuery(document).ready(function(){
      }
  });
 });
-   
+
+jQuery(document).on("click",".updateadminstatus",function(){
+  var status=jQuery(this).children("i").attr("status");
+  var admin_id=jQuery(this).attr("admin_id");
+jQuery.ajax({
+   type:'post',
+   url:'/admin/updateadminstatus',
+   data:{status:status,admin_id:admin_id},
+   success:function(resp){
+       console.log(resp);
+     
+     if(resp['status']==0){
+         jQuery("#admin-"+admin_id).html("<i title='In active' class='fas fa-toggle-off' aria-hidden='true' status='In active'></i>");
+     }else if(resp['status']==1){
+      jQuery("#admin-"+admin_id).html("<i title='Active' class='fas fa-toggle-on' aria-hidden='true' status='Active'></i>");
+     }
+   },
+   error:function(resp){
+       alert(resp.message);
+   }
+});
+});
+   //update cmspage staus
+//jQuery(".updatecmspagestatus").click(function(){
+  jQuery(document).on("click",".updatecmspagestatus",function(){
+    var status=jQuery(this).children("i").attr("status");
+    var cmspage_id=jQuery(this).attr("cmspage_id");
+  jQuery.ajax({
+     type:'post',
+     url:'/admin/updatecmspagestatus',
+     data:{status:status,cmspage_id:cmspage_id},
+     success:function(resp){
+         console.log(resp);
+       
+       if(resp['status']==0){
+           jQuery("#cmspage-"+cmspage_id).html("<i title='In active' class='fas fa-toggle-off' aria-hidden='true' status='In active'></i>");
+       }else if(resp['status']==1){
+        jQuery("#cmspage-"+cmspage_id).html("<i title='Active' class='fas fa-toggle-on' aria-hidden='true' status='Active'></i>");
+       }
+     },
+     error:function(resp){
+         alert(resp.message);
+     }
+  });
+  });
+   //update brand staus
+//jQuery(".updateuserstatus").click(function(){
+jQuery(document).on("click",".updateuserstatus",function(){
+  var status=jQuery(this).children("i").attr("status");
+  var user_id=jQuery(this).attr("user_id");
+jQuery.ajax({
+   type:'post',
+   url:'/admin/updateuserstatus',
+   data:{status:status,user_id:user_id},
+   success:function(resp){
+       console.log(resp);
+     
+     if(resp['status']==0){
+         jQuery("#user-"+user_id).html("<i title='In active' class='fas fa-toggle-off' aria-hidden='true' status='In active'></i>");
+     }else if(resp['status']==1){
+      jQuery("#user-"+user_id).html("<i title='Active' class='fas fa-toggle-on' aria-hidden='true' status='Active'></i>");
+     }
+   },
+   error:function(){
+       alert("error");
+   }
+});
+});
 //update brand staus
 //jQuery(".updatebrandstatus").click(function(){
 jQuery(document).on("click",".updatebrandstatus",function(){
@@ -194,6 +265,54 @@ jQuery(document).on("click",".updatebrandstatus",function(){
      }
  });
 });
+jQuery(document).on("click",".updateshippingstatus",function(){
+     
+    var status=jQuery(this).text();
+    var shipping_id=jQuery(this).attr("shipping_id");
+ jQuery.ajax({
+     type:'post',
+     url:'/admin/updateshippingstatus',
+     data:{status:status,shipping_id:shipping_id},
+     success:function(resp){
+         //alert(resp);
+         console.log(resp);
+       
+       if(resp['status']==0){
+           jQuery("#shipping-"+shipping_id).html("In active");
+       }else if(resp['status']==1){
+        jQuery("#shipping-"+shipping_id).html("Active");
+
+       }
+     },
+     error:function(){
+         alert("error");
+     }
+ });
+});
+// jQuery(document).on("click",".updateshippingstatus",function(){
+//     var status=jQuery(this).children("i").attr("status");
+//     var shipping_id=jQuery(this).attr("shipping_id");
+//    // alert(shipping_id);
+//  jQuery.ajax({
+//      type:'post',
+//      url:'/admin/updateshippingstatus',
+//      data:{status:status,shipping_id:shipping_id},
+//      success:function(resp){
+//         //alert(resp);
+//          console.log(resp);
+       
+//          if(resp['status']==0){
+//             jQuery("#shipping-"+shipping_id).html("In active");
+//         }else if(resp['status']==1){
+//          jQuery("#shipping-"+section_id).html("Active");
+
+//         }
+//      },
+//      error:function(){
+//          alert("error");
+//      }
+//  });
+// });
 //update banner status
 jQuery(document).on("click",".updatebannerstatus",function(){
     var status=jQuery(this).children("i").attr("status");
@@ -327,5 +446,22 @@ $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
 $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
 //Money Euro
 $('[data-mask]').inputmask()
+
+//courier name and number incase of order shipped
+jQuery("#couriername").hide();
+jQuery("#trackingnumber").hide();
+jQuery("#orderstatusses").on('change',function(){
+      if(this.value=="Shipped"){
+          //alert("xxxx");
+        jQuery("#couriername").show();
+        jQuery("#trackingnumber").show();   
+      }else{
+        jQuery("#couriername").hide();
+        jQuery("#trackingnumber").hide();
+      }
+});
+//calculate Shipping Charges and  Updated Grand Total
+
+
 
 });

@@ -27,10 +27,7 @@
           <div class="card-header">
             <h3 class="card-title">Category form</h3>
                 @include('layouts.adminlayout.adminpartials.alerts')
-            <div class="card-tools">
-              <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-              <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
-            </div>
+           
           </div>
           <!-- /.card-header -->
           <form action="{{ route('category.modify') }}" method="POST" role="form" enctype="multipart/form-data">
@@ -89,7 +86,7 @@
               <div class="col-12 col-sm-6">
                 <div class="form-group{{$errors->has('categorydescription')?' has-error text-danger':''}}">
                   <label for="categorydiscount">Category discount</label>
-                      <input type="number" name="categorydiscount" id="categorydiscount" class="form-control" value="{{Request::old('categorydiscount')}}" placeholder="enter  categorydiscount">
+                      <input type="number" name="categorydiscount" id="categorydiscount" class="form-control" value="{{((Request::old('categorydiscount'))?Request::old('categorydiscount'):'0.00')}}" placeholder="enter  categorydiscount">
                       @if ($errors->has('categorydiscount'))
                       <span class="help-block text-danger">{{$errors->first('categorydiscount')}}</span>
                   @endif

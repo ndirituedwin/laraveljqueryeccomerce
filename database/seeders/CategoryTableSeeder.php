@@ -17,10 +17,12 @@ class CategoryTableSeeder extends Seeder
     {
         $cateforyrecords=[
    
-           [ 'parent_id'=>0,
+           [
+            'admin_id'=>1,   
+            'parent_id'=>0,
             'section_id'=>1,
             'categoryname'=>'T shirts',
-            'slug'=>Str::slug('T-shirts'),
+            'slug'=>Str::slug('T shirts'),
             'categoryimage'=>'null',
             'categorydiscount'=>0.12,
             'description'=>'T shirts for men',
@@ -30,7 +32,9 @@ class CategoryTableSeeder extends Seeder
             'metakeywords'=>'t shirts meta description',
             'status'=>1,
         ],
-        [ 'parent_id'=>0,
+        [
+            'admin_id'=>2,
+            'parent_id'=>0,
         'section_id'=>2,
         'categoryname'=>'women T shirts',
         'slug'=>Str::slug('women T shirts'),

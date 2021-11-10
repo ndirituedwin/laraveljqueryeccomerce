@@ -29,11 +29,11 @@ class Postcategoryrequest extends FormRequest
             'categoryname'=>'unique:categories|required|string|max:50',
             'categoryimage'=>'nullable|image|max:1999',
             'categorydiscount'=>'required|numeric',
-            'categorydescription'=>'required|max:1000',
-            'categoryurl'=>'required|string|max:100',
-            'metatitle'=>'required|string|max:255',
-            'metadescription'=>'required|max:1000',
-            'metakeyword'=>'required|string|max:255',
+            'categorydescription'=>'nullable|string|max:1000',
+            'categoryurl'=>'nullable|string|max:100',
+            'metatitle'=>'nullable|string|max:255',
+            'metadescription'=>'nullable|string|max:1000',
+            'metakeyword'=>'nullable|string|max:255',
         ];
     }
 }

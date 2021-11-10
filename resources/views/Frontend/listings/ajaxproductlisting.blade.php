@@ -3,6 +3,7 @@ use App\Models\Product;
 ?>
 <div class="tab-pane  active" id="blockView">
     <ul class="thumbnails">
+        @if (count($products)>0)
       @foreach ($products as $product)
          <li class="span3">
             <div class="thumbnail">
@@ -25,9 +26,8 @@ use App\Models\Product;
                     <h4 style="text-align:center">
                         <a  class="btn btn-danger"  href="{{ route('singlepro.getdetails',$product) }}">View Details</a>
                     </h4>
-                    <h4 style="text-align:center"><a class="btn" href="{{ route('singlepro.getdetails',$product) }}"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> 
-                        <a class="btn btn-primary" href="#">
-                           @if ($discountedprice > 0)
+                    <h4 style="text-align:center"><a class="btn" href="{{ route('singlepro.getdetails',$product) }}"> 
+                                               @if ($discountedprice > 0)
                            <del>Kshs/={{$product['productprice']}}</del>
                                @else
                                {{$product['productprice']}}
@@ -58,7 +58,12 @@ use App\Models\Product;
                
             </div>
         </li>  
-      @endforeach               
+      @endforeach  
+      @else
+      <center>
+        <span style="color: red">no products </span>
+      </center>
+      @endif             
     </ul>
     <hr class="soft"/>
 </div>

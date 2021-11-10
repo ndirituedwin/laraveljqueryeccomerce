@@ -1,7 +1,7 @@
 
 @extends('Frontend.frontendlayout.frontendmainlayout')
 @section('content')
-<div class="span9">
+<div class="span9" style="background-image: url('download.jpg')">
     <ul class="breadcrumb">
 		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
 		<li class="active">Login</li>
@@ -85,6 +85,9 @@
 			<div class="well">
 			<h5>ALREADY REGISTERED ?</h5>
 			<a href="{{ route('client.getlogin') }}">Login</a>
+			<br>
+			<div><a class="btn btn-primary" href="{{ route('google.redirect') }}">Login with google</a></div>
+			
 			
 		</div>
 		</div>

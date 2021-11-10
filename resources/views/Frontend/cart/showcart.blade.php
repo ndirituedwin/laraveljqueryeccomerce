@@ -4,9 +4,9 @@
 <div class="span9">
     <ul class="breadcrumb">
 		<li><a href="{{ route('frontend.index') }}">Home</a> <span class="divider">/</span></li>
-		<li class="active"> SHOPPING CART</li>
+		<li class="active" style="color: crimson"> SHOPPING CART</li>
     </ul>
-	<h3>  SHOPPING CART [ <small><span class="ttcartitems">{{TotalCartItems()}}{{Str::plural('item',TotalCartItems())}} </span> </small>]<a href="{{ route('frontend.index') }}" class="btn btn-large pull-right"><i class="icon-arrow-left"></i> Continue Shopping </a></h3>	
+	<h3 style="color: crimson">  SHOPPING CART [ <small><span class="ttcartitems" style="color: darkgreen">{{TotalCartItems()}}{{Str::plural('item',TotalCartItems())}} </span> </small>]<a href="{{ route('frontend.index') }}" class="btn btn-large pull-right btn-primary"><i class="icon-arrow-left"></i> Continue Shopping </a></h3>	
 	<hr class="soft"/>
 	
 	@include('layouts.adminlayout.adminpartials.alertss')
@@ -14,7 +14,7 @@
                  @include('Frontend.cart.cartitems')
 			</div>
 		
-            <table class="table table-bordered">
+            <table class="table table-bordered" >
 			<tbody>
 				 <tr>
                   <td> 
@@ -22,13 +22,13 @@
 					user="1"
 				@endif>
 					@csrf
-				<div class="control-group">
+				{{-- <div class="control-group">
 				<label class="control-label"><strong> Coupon code: </strong> </label>
 				<div class="controls">
-				<input type="text" name="couponcode" id="couponcode" class="input-medium" placeholder="enter coupon code" required>
-				<button type="submit" class="btn"> ADD </button>
+				{{-- <input type="text" name="couponcode" id="couponcode" class="input-medium" placeholder="enter coupon code" required>
+				<button type="submit" class="btn"> ADD </button> --}}
 				</div>
-				</div>
+			{{--	</div> --}}
 				</form>
 				</td>
                 </tr>
@@ -36,7 +36,7 @@
 			</tbody>
 			</table>
 			
-			<table class="table table-bordered">
+			{{-- <table class="table table-bordered">
 			 <tr><th>ESTIMATE YOUR SHIPPING </th></tr>
 			 <tr> 
 			 <td>
@@ -61,9 +61,9 @@
 				</form>				  
 			  </td>
 			  </tr>
-            </table> 
-	<a href="{{ route('frontend.index') }}" class="btn btn-large"><i class="icon-arrow-left"></i> Continue Shopping </a>
-	<a href="{{ route('checkout.page') }}" class="btn btn-large pull-right">Next <i class="icon-arrow-right"></i></a>
+            </table>  --}}
+	<a href="{{ route('frontend.index') }}" class="btn btn-large btn-primary"><i class="icon-arrow-left"></i> Continue Shopping </a>
+	<a href="{{ route('checkout.page') }}" class="btn btn-large pull-right btn-primary">Next <i class="icon-arrow-right"></i></a>
 	
 </div>
 @endsection

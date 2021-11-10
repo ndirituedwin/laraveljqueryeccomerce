@@ -62,7 +62,7 @@ class AuthController extends Controller
 
       $authuser=$this->createUser($user);
       Auth::login($authuser,true);
-      return redirect()->route('home');
+      return redirect()->route('frontend.index')->withsuccess("logged in successfully");
     }
     public function createuser($user){
         $authuser=User::where('google_id',$user->id)->first();
@@ -74,6 +74,7 @@ class AuthController extends Controller
                 'first_name'=>$user->name,
                 'google_id'=>$user->id,
                 'email'=>$user->email,
+                'status'=>1,
               //  'avatar'=>$user->avatar,
 
             ]

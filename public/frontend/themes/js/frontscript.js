@@ -4,6 +4,9 @@ jQuery(document).ready(function(){
        'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
      }
    });
+   jQuery("#sortt").on('change',function(){
+            this.form.submit();
+   });
    jQuery(".addressdelete").on('click',function(){
      var result=confirm("Are you sure you wanna delete this address?")
      if(!result){
@@ -29,7 +32,7 @@ jQuery(document).ready(function(){
             alert("error");
         }
     });
-});
+}); 
 jQuery("#confirmpassword").keyup(function(){
     var confirmpassword=jQuery("#confirmpassword").val();
     var password=jQuery("#newpassword").val();
@@ -57,7 +60,7 @@ jQuery("#confirmpassword").keyup(function(){
    jQuery("#mobilenumber").keyup(function(){
     var phone=jQuery("#mobilenumber").val();
   // alert(email);
-     
+
     jQuery.ajax({
         type:'post',
         url:'/frontend/checkphonenumber',
@@ -173,7 +176,7 @@ jQuery("#password_confirmation").keyup(function(){
   var fit=get_filter("fit");
   var occassion=get_filter("occassion");
   var slug=jQuery("#slug").val();
- 
+
             jQuery.ajax({
               url:'/categoryproducts/'+slug,
               method:"post",
@@ -182,11 +185,12 @@ jQuery("#password_confirmation").keyup(function(){
                 // console.log(data);
                  jQuery(".filteproducts").html(data);
               },
+
               error:function(){
-                alert("error");
+              alert("error");
               }
-             
-                
+
+
             })
     });
     //fabric
@@ -210,8 +214,8 @@ jQuery("#password_confirmation").keyup(function(){
         error:function(){
           alert("error");
         }
-       
-          
+
+
       })
     });
     //sleeve
@@ -221,7 +225,7 @@ jQuery("#password_confirmation").keyup(function(){
       var pattern=get_filter("pattern");
       var fit=get_filter("fit");
       var occassion=get_filter("occassion");
-    
+
       var sort=jQuery("#sort option:selected").val();
       var slug=jQuery("#slug").val();
       jQuery.ajax({
@@ -235,8 +239,8 @@ jQuery("#password_confirmation").keyup(function(){
         error:function(){
           alert("error");
         }
-       
-          
+
+
       })
     });
     //pattern
@@ -246,7 +250,7 @@ jQuery("#password_confirmation").keyup(function(){
           var pattern=get_filter("pattern");
           var fit=get_filter("fit");
           var occassion=get_filter("occassion");
-        
+
       var sort=jQuery("#sort option:selected").val();
       var slug=jQuery("#slug").val();
       jQuery.ajax({
@@ -260,8 +264,8 @@ jQuery("#password_confirmation").keyup(function(){
         error:function(){
           alert("error");
         }
-       
-          
+
+
       })
     });
 
@@ -272,7 +276,7 @@ jQuery("#password_confirmation").keyup(function(){
         var pattern=get_filter("pattern");
         var fit=get_filter("fit");
         var occassion=get_filter("occassion");
-      
+
     var sort=jQuery("#sort option:selected").val();
     var slug=jQuery("#slug").val();
     jQuery.ajax({
@@ -286,8 +290,8 @@ jQuery("#password_confirmation").keyup(function(){
       error:function(){
         alert("error");
       }
-     
-        
+
+
     })
   });
 
@@ -298,7 +302,7 @@ jQuery("#password_confirmation").keyup(function(){
       var pattern=get_filter("pattern");
       var fit=get_filter("fit");
       var occassion=get_filter("occassion");
-    
+
   var sort=jQuery("#sort option:selected").val();
   var slug=jQuery("#slug").val();
   jQuery.ajax({
@@ -312,8 +316,8 @@ jQuery("#password_confirmation").keyup(function(){
     error:function(){
       alert("error");
     }
-   
-      
+
+
   })
 });
     function get_filter(class_name){
@@ -331,7 +335,7 @@ jQuery("#password_confirmation").keyup(function(){
       }
       var product_id=$(this).attr("product_id");
       var slug=$(this).attr("slug");
-     
+
       $.ajax({
         url:'/get-product-size',
         data:{size:size,product_id:product_id},
@@ -343,7 +347,7 @@ jQuery("#password_confirmation").keyup(function(){
             jQuery(".getattributeprice").html("<del>Ksh/="+resp['productprice']+"</del> Disc price:Kshs/="+resp['discounted_price']);
           }else{
            jQuery(".getattributeprice").html("Ksh/="+resp['productprice']);
-  
+
           }
          // alert(rep);
         },
@@ -353,35 +357,52 @@ jQuery("#password_confirmation").keyup(function(){
       });
     });
     //update cart item
-    jQuery(document).on('click','.btnItemUpdate',function(){
-     if(jQuery(this).hasClass('qtyMinus')){
-       var quantity=jQuery(this).prev().val();
+    $(document).on('click','.btnItemUpdate',function(){
+     if($(this).hasClass('qtyMinus')){
+       //var quantity=jQuery(this).prev().val();
+       var quantity=jQuery("#appendedInputButtons").val();
+       //alert(quantity);
       if(quantity<=1){
-        alert("You cannot reduce the quantity any further");
+        Swal.fire({
+          title: 'Warning',
+          text: "You cannot reduce the quantity any further",
+          icon: 'warning',
+          // showCancelButton: true,
+          // confirmButtonColor: '#3085d6',
+          // cancelButtonColor: '#d33',
+          // confirmButtonText: 'Yes, delete it!'
+        });
         return false;
       }else{
              new_qty=parseInt(quantity)-1;
+           //  alert(new_qty);
       }
      }
-     if(jQuery(this).hasClass('qtyPlus')){
-       var quantity=jQuery(this).prev().prev().val();
+     if($(this).hasClass('qtyPlus')){
+      var quantity=jQuery("#appendedInputButtons").val();
+
+//      var quantity=jQuery(this).prev().prev().val();
        new_qty=parseInt(quantity)+1;
+      // alert(new_qty);
      }
      //alert(new_qty);
-     var cartid=jQuery(this).data('cartid');
+     var cartid=$(this).data('cartid');
     // alert(cartid);
     jQuery.ajax({
-         type:'post',
+          data:{"cartid":cartid,"qty":new_qty},
          url:'/updatecartquantitywithajax',
-         data:{"cartid":cartid,"qty":new_qty},
+         type:'post',
          success:function(resp){
-          // alert(resp.status);
+          //alert(resp.status);
           if(resp.status==false){
-            alert(resp.message);
+//            alert(resp.message);
+
           }
-          //alert(resp.TotalCartItems); 
+          //alert(resp.TotalCartItems);
+          jQuery("#appendcartitems").html(resp.view);
+          // jQuery("#appedninpu").html(resp.view);
           $(".ttcartitems").html(resp.TotalCartItems);
-         jQuery("#appendcartitems").html(resp.view);
+        //  jQuery("#appendcartitems").html(resp.view);
          },
          error:function(){
            alert("error");
@@ -390,13 +411,35 @@ jQuery("#password_confirmation").keyup(function(){
 
 
     });
-    
-   
- 
+
+
+
 
       //delete cart item
       jQuery(document).on('click','.btnItemDelete',function(){
         var cartid=jQuery(this).data('cartid');
+        // var record=jQuery(this).attr("record");
+        // var recordid=jQuery(this).attr("recordid");
+        // Swal.fire({
+        //   title: 'Are you sure?',
+        //   text: "You won't be able to revert this!",
+        //   icon: 'warning',
+        //   showCancelButton: true,
+        //   confirmButtonColor: '#3085d6',
+        //   cancelButtonColor: '#d33',
+        //   confirmButtonText: 'Yes, delete it!'
+        // }).then((result) => {
+        //   if (result.isConfirmed) {
+        //     Swal.fire(
+        //       'Deleted!',
+        //       'Your file has been deleted.',
+        //       'success'
+        //     )
+        //     window.location.href="/frontend/delete-"+record+"/"+recordid;
+        //     $(".ttcartitems").html(resp.TotalCartItems);
+        //                  jQuery("#appendcartitems").html(resp.view);
+        //   }
+        // });
        var result=confirm("Are you sure you wanna trash this item ?");
        if(result){
         jQuery.ajax({
@@ -404,17 +447,19 @@ jQuery("#password_confirmation").keyup(function(){
             url:'/deletecartitemwithajax/easily',
             data:{"cartid":cartid},
             success:function(resp){
+
               $(".ttcartitems").html(resp.TotalCartItems);
                   jQuery("#appendcartitems").html(resp.view);
 
             },
-          /* error:function(){
-              alert("error");
-            }*/
+          //  error:function(resp){
+          //       console.log(resp);
+          //     alert(resp);
+          //   }
        });
        }
        });
-       //apply coupon 
+       //apply coupon
        jQuery("#applycoupon").submit(function(){
      var user=jQuery(this).attr("user");
      if(user==1){
@@ -454,7 +499,161 @@ jQuery("#password_confirmation").keyup(function(){
          alert("error");
        }
      });
-        
+
        });
-    
+       jQuery("input[name=address_id]").bind('change',function(){
+        //alert("mn");
+        var shippingcharges=jQuery(this).attr("shipping_charges");
+        var totalprice=jQuery(this).attr("total_price");
+        var couponamount=jQuery(this).attr("coupon_amount");
+        var codpincodecount=jQuery(this).attr("codpincodecount");
+        var prepaidpincodecount=jQuery(this).attr("prepaidpincodecount");
+
+        if(codpincodecount>0){
+          jQuery(".codmethod").show();
+        }else{
+          jQuery(".codmethod").hide();
+
+
+        }
+        if(prepaidpincodecount>0){
+          jQuery(".prepaidmethod").show();
+          //jQuery(".placeordr").show();
+
+    }else{
+      //hide cod button
+      jQuery(".prepaidmethod").hide();
+      //jQuery(".placeordr").hide();
+    }
+
+       // alert(couponamount);
+        if(couponamount==""){
+           couponamount=0;
+
+        }
+        jQuery(".shipping_charges").html("Kshs."+shippingcharges);
+        var grand_total=parseInt(totalprice)+parseInt(shippingcharges)-parseInt(couponamount);
+        //alert(grand_total);
+        jQuery(".couponamount").html("Kshs."+couponamount);
+        jQuery(".grand_total").html("Kshs."+grand_total);
+    });
+
+    //checkingthe pincode
+    jQuery("#checkpincode").on('click',function(){
+      var pincode=jQuery("#enterpincode").val();
+     // alert(pincode);
+      if(pincode==""){
+        Swal.fire({
+          title: 'Warning',
+          text: "field is empty and must be filled",
+          icon: 'warning',
+          // showCancelButton: true,
+          // confirmButtonColor: '#3085d6',
+          // cancelButtonColor: '#d33',
+          // confirmButtonText: 'Yes, delete it!'
+        });
+            }else{
+              jQuery.ajax({
+                type:'post',
+                data:{pincode:pincode},
+                url:'/checkifpincodeexists',
+                success:function(resp){
+                     //alert(resp);
+                     if(resp==false){
+                        // alert("sddd");
+                      Swal.fire({
+                        title: 'Warning',
+                        text: "The pincode is invalid",
+                        icon: 'warning',
+                        // showCancelButton: true,
+                        // confirmButtonColor: '#3085d6',
+                        // cancelButtonColor: '#d33',
+                        // confirmButtonText: 'Yes, delete it!'
+                      });
+
+                     }else if(resp==true){
+                      Swal.fire({
+                        title: 'Success',
+                        text: "The pincode is valid",
+                        icon: 'success',
+                        // showCancelButton: true,
+                        // confirmButtonColor: '#3085d6',
+                        // cancelButtonColor: '#d33',
+                        // confirmButtonText: 'Yes, delete it!'
+                      });
+                     }
+                },
+                error:function(){
+                  Swal.fire({
+                    title: 'Warning',
+                    text: "An error occurred",
+                    icon: 'warning',
+                    // showCancelButton: true,
+                    // confirmButtonColor: '#3085d6',
+                    // cancelButtonColor: '#d33',
+                    // confirmButtonText: 'Yes, delete it!'
+                  });
+                }
+              });
+            }
+    });
+    // jQuery(wrapper).on('click','.remove_button',function(e){
+    //   e.preventDefault();
+    // jQuery("#getaccesstoken").on('click',function(){
+    //  // alert("bvcx");
+    //   jQuery.ajax({
+    //     type:'post',
+    //     url:'/getaccesstoken',
+    //       success:function(response){
+    //         //console.log(response);
+    //          console.log(response.data);
+    //       },
+    //       error:function(error){
+    //       //  console.log(erro);
+    //       }
+    //   });
+    // });
+    // jQuery("#getaccesstoken").on('click',function(){
+    //   alert("LKJHGF");
+    // });
+    // document.getElementById("getaccesstoken").addEventListener('click',(event)=>{
+    //   event.preventDefault()
+    //  axios.post('/get-token',{})
+    //  .then((response)=>{
+    //    console.log(response);
+    //  })
+    //  .catch((error)=>{
+    //    console.log(error);
+    //  })
+    // });
+    setInterval(showTime, 1000);
+    function showTime() {
+      let time = new Date();
+      let hour = time.getHours();
+      let min = time.getMinutes();
+      let sec = time.getSeconds();
+      am_pm = "AM";
+
+      if (hour > 12) {
+        hour -= 12;
+        am_pm = "PM";
+      }
+      if (hour == 0) {
+        hr = 12;
+        am_pm = "AM";
+      }
+
+      hour = hour < 10 ? "0" + hour : hour;
+      min = min < 10 ? "0" + min : min;
+      sec = sec < 10 ? "0" + sec : sec;
+
+      let currentTime = hour + ":"
+          + min + ":" + sec + am_pm;
+
+      document.getElementById("clock")
+          .innerHTML = currentTime;
+      // jQuery("#clock").innerHtml().val(currentTime);
+    }
+    showTime();
+
 });

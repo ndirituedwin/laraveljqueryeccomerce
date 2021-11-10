@@ -6,7 +6,7 @@
 		<li><a href="{{ route('cart.show') }}">Home</a> <span class="divider">/</span></li>
 		<li class="active">Checkout</li>
     </ul>
-	<h3>  Checkout[ <small><span class="ttcartitems">{{TotalCartItems()}}{{Str::plural('item',TotalCartItems())}} </span> </small>]<a href="{{ route('cart.show') }}" class="btn btn-large pull-right"><i class="icon-arrow-left"></i> back to cart </a></h3>	
+	<h3>  Checkout[ <small><span class="ttcartitems">{{TotalCartItems()}}{{Str::plural('item',TotalCartItems())}} </span> </small>]<a href="{{ route('cart.show') }}" class="btn btn-sm pull-right btn-primary"><i class="icon-arrow-left"></i> back to cart </a></h3>	
 	<hr class="soft"/>
 	
 	@include('layouts.adminlayout.adminpartials.alertss')
@@ -18,12 +18,13 @@
         @foreach ($deliveryaddress as $deliveryaddres)
         <tr> 
             <td>
-                   <div class="control-group" style="float: left{{$errors->has('address_id')? 'has-error text-danger':''}}">
-                    <input type="radio" id="{{$deliveryaddres['id']}}" name="address_id" value="{{$deliveryaddres['id']}}">&nbsp;&nbsp;
+              
+                   <div class="control-group"  style="float: left{{$errors->has('address_id')? 'has-error text-danger':''}}">
+                    <input type="radio" coupon_amount="{{Session::get('couponamount')}}" shipping_charges="{{$deliveryaddres['shipping_charges']}}" codpincodecount="{{$deliveryaddres['codpincodecount']}}" prepaidpincodecount="{{$deliveryaddres['prepaidpincodecount']}}" total_price="{{$totalprice}}" id="{{$deliveryaddres['id']}}" name="address_id" value="{{$deliveryaddres['id']}}">&nbsp;&nbsp;
                 
                   </div>
                    <div class="control-group">
-                     <label class="control-label" for="addressname"  >{{$deliveryaddres['name']}},{{$deliveryaddres['address']}},{{$deliveryaddres['city']}},{{$deliveryaddres['state']}},{{$deliveryaddres['country']}}</label>  
+                     <label class="control-label" for="addressname"  >{{$deliveryaddres['name']}},{{$deliveryaddres['address']}},{{$deliveryaddres['city']}},{{$deliveryaddres['state']}},{{$deliveryaddres['country']}},{{$deliveryaddres['pincode']}} </label>  
                      @if ($errors->has('address_id'))
                      <span class="help-block text-danger"><font color="red">{{$errors->first('address_id')}}</font> </span> 
                        @endif
@@ -74,8 +75,8 @@
               <td>
                 {{(isset($cartitem['quantity'])?$cartitem['quantity']:'')}}
               </td>
-              <td>Kshs/={{$productattributeprice['productprice']}}</td>
-              <td>{{$productattributeprice['discount']}}</td>
+              <td>Kshs/={{$productattributeprice['productprice']*$cartitem['quantity']}}</td>
+              <td>{{$productattributeprice['discount']*$cartitem['quantity']}}</td>
               <td>Kshs/={{($productattributeprice['discounted_price']) * ($cartitem['quantity'])}}</td>
             </tr> 
             <?php $totalprice=$totalprice+( $productattributeprice['discounted_price'] * $cartitem['quantity'] )?>
@@ -99,10 +100,14 @@
               
             </td>
           </tr>
+          <tr>
+            <td colspan="6" style="text-align:right">Shipping charges:	</td>
+            <td class="shipping_charges">Kshs:0.00</td>
+          </tr>
           
            <tr>
             <td colspan="6" style="text-align:right"><strong>Grand TOTAL (Kshs @if (!empty($totalprice))
-                 {{$totalprice}}-<span class="couponamount">Kshs</span>)=</strong>
+                 {{$totalprice}}-<span class="couponamount">Kshs</span>+<span class="shipping_charges">Kshs:0.00</span>)=</strong>
             @endif</td>
               
             <td class="label label-important" style="display:block"> <strong class="grand_total">Ksh:/=@if (!empty($totalprice))
@@ -128,16 +133,25 @@
 				<div class="control-group{{$errors->has('payment_gateway')? 'has-error text-danger':''}}">
 				<label for="payment_gateway" class="control-label"><strong> Payment method: </strong> </label>
 				<div class="controls">
-
-            <span >
+            <span class="codmethod">
               <input type="radio" name="payment_gateway" id="COD" value="COD"><span>&nbsp;<strong>COD</strong>&nbsp;&nbsp;
-              <input type="radio" name="payment_gateway" id="paypal" value="Paypal">&nbsp;<strong>Paypal</strong>
-              @if ($errors->has('payment_gateway'))
+               </span></span>
+               <span class="prepaidmethod">
+                <input type="radio" name="payment_gateway" id="paypal" value="Paypal">&nbsp;<strong>Paypal</strong>
+               </span>
+               {{-- <span class="mpesa">
+                <input type="radio" name="payment_gateway" id="lipanampesa" value="lipanampesa">&nbsp;<strong>Lipa na mpesa</strong>
+               </span> --}}
+              
+                @if ($errors->has('payment_gateway'))
               <span class="help-block text-danger"><font color="red">{{$errors->first('payment_gateway')}}</font> </span> 
                 @endif
-            </span>
           
 					</div>
+          {{-- <div class="float-right">
+            <span>--OR--</span>
+            <a href="{{ route('lipa.nampesa') }}" class="btn btn-primary">Lipa na mpesa</a>
+          </div> --}}
 				</div>
 				</td>
                 </tr>
@@ -146,8 +160,8 @@
 			</table>
 			
 		
-	<a href="{{ route('cart.show') }}" class="btn btn-large"><i class="icon-arrow-left"></i> back to cart </a>
-	<button type="submit" class="btn btn-large pull-right">Place Order<i class="icon-arrow-right"></i></button>
+	<a href="{{ route('cart.show') }}" class="btn btn-large btn-warning"><i class="icon-arrow-left"></i> back to cart </a>
+	<button type="submit" class="btn btn-large pull-right btn-success " id="placeordr">Place Order <i class="icon-arrow-right "></i></button>
     </form>
 </div>
 @endsection

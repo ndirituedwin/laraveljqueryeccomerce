@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use App\Models\Admin;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -18,8 +20,19 @@ class Admincontroller extends Controller
 {
     public function dashboard(){
         Session::put('page','dashboard');
-        return view('admin.admindashboard');
+
+//        $userorders=Order::with('orders_products')->where('orderstatus',"New")->orderBy('id','DESC')->get()->toArray();
+$newrorders=Order::with('orders_products')->where('orderstatus',"New")->orderBy('id','DESC')->count();
+$cancelledorders=Order::with('orders_products')->where('orderstatus',"Cancelled")->orderBy('id','DESC')->count();
+$users=User::count();
+       //dd($users);
+        //dd($userorders);
+        return view('admin.admindashboard')
+        ->withusers($users)
+        ->withcancelledorders($cancelledorders)
+        ->withneworders($newrorders);
     }
+
     public function getadminlogin(){
         return view('admin.adminlogin');
     }
@@ -28,12 +41,12 @@ class Admincontroller extends Controller
     $data=$request->all();
    // dd($data);
 
-    if(!Auth::guard('admin')->attempt($request->only(['email','password']),$request->has('remember'))){
+    if(!Auth::guard('admin')->attempt(['email'=>$request['email'],'password'=>$request['password'],'status'=>1],$request->has('remember'))){
         return back()->withdanger('could not sign you in with those details');
 
     }
   //  dd("rr");
-      
+
         return redirect()->route('dashboard');
     }
     public function adminlogout(){
@@ -54,7 +67,7 @@ class Admincontroller extends Controller
             return false;
         }
         return true;
-     
+
     }
 public function checkconfirmpasswords(Request $request){
 
@@ -67,7 +80,7 @@ public function checkconfirmpasswords(Request $request){
     public function postadminsettings(Updatepasswordrequest $request){
        if(!Hash::check($request->currentpassword,Auth::guard('admin')->user()->password)){
         return back()->withdanger('password  is incorrect');
-       } 
+       }
       Admin::where('id',Auth::guard('admin')->user()->id)->update([
           'password'=>bcrypt($request->password),
       ]);

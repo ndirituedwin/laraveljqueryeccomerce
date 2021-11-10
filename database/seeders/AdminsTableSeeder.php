@@ -16,13 +16,14 @@ class AdminsTableSeeder extends Seeder
     {
         $adminrecords=[
             [
+
                 'name'=>'edwin',
                 'type'=>'admin',
                 'mobile'=>'0799149758',
                 'email'=>'ndiritu.edwin018@gmail.com',
                 'image'=>'',
                 'status'=>0,
-                'password'=>bcrypt('ndiritu.edwin018@gmail.com'),
+                'password'=>bcrypt('123456'),
             ],
             [
                 'name'=>'apollo',
@@ -33,7 +34,7 @@ class AdminsTableSeeder extends Seeder
                 'status'=>0,
                 'password'=>bcrypt('ndiritu.apollo018@gmail.com'),
             ]
-           
+
       ];
       foreach($adminrecords as $record){
                  Admin::create($record);
