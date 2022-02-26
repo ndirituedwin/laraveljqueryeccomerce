@@ -1,6 +1,5 @@
 @extends('layouts.adminlayout.adminlayout')
 @section('content')
-
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -23,7 +22,7 @@
     <section class="content">
       <div class="container-fluid">
         <!-- SELECT2 EXAMPLE -->
-        
+
           <form action="{{ route('admin.attribute',$product) }}" method="POST" role="form" enctype="multipart/form-data">
           @csrf
             <div class="card card-default">
@@ -36,11 +35,11 @@
             </div>
           </div>
           <!-- /.card-header -->
-          
+
             <div class="card-body">
             <div class="row">
               <div class="col-md-6">
-                
+
                   <div class="form-grop{{$errors->has('productname')?' has-error text-danger':''}}">
                       <label for="productname" class="control-label">product name</label>
                       <input type="text" readonly name="productname" value="{{Request::old('productname')?:$product->productname}}" id="productname" class="form-control" placeholder="enter a product">
@@ -54,11 +53,11 @@
                   @if ($errors->has('productcode'))
                   <span class="help-block text-danger">{{$errors->first('productcode')}}</span>
               @endif
-              </div>     
+              </div>
               </div>
               <!-- /.col -->
               <div class="col-md-6">
-              
+
               <div class="form-grop{{$errors->has('productcolor')?' has-error text-danger':''}}">
                 <label for="productcolor" class="control-label">product color</label>
                 <input type="text" readonly name="productcolor" value="{{Request::old('productcolor')?:$product->productcolor}}" id="productcolor" class="form-control" placeholder="enter a product color">
@@ -82,7 +81,7 @@
             @endif
             <br>
                 @if (!empty($product->productimage))
-                <img src="/adminlte/adminimages/images/adminproducts/small/{{$product->productimage}}" alt="">           
+                <img src="/adminlte/adminimages/images/adminproducts/small/{{$product->productimage}}" alt="">
                  <a href="javascript:void(0)" class="confirmdelete" record="productimage" recordid="{{$product->id}}">Delete product image</a>
                 @endif
               </div>
@@ -99,7 +98,7 @@
                     </div>
                 </div>
             </div>
-        </div>            
+        </div>
             </div>
           </div>
           <div class="card-footer">
@@ -148,13 +147,13 @@
                                  @else
                                <a class="updateattributestatus" id="attribute-{{$attribute->id}}" attribute_id="{{$attribute->id}}" href="javascript:void(0)">In active</a>
                              @endif
-                            </td> 
- 
+                            </td>
+
                             <td>
                              <a   href="javascript:void(0)" class="fas fa-trash confirmdelete" record="attribute" recordid="{{$attribute->id}}" title="trash product attribute"></a>
                             </td>
-                           
-                           
+
+
                            </tr>
                         @endforeach
                 </tbody>
@@ -163,7 +162,7 @@
             <div class="card-footer">
               <button type="submit" class="btn btn-primary">Update attributes</button>
              </div>
-   
+
             <!-- /.card-body -->
           </div>
         </form>

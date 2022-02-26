@@ -23,7 +23,7 @@ class IndexController extends Controller
        // dd($featuredproducts);
        $featuredproductss=Product::where('featured',1)->where('status',1)->get()->toArray();
           $featuredproductsschunk=array_chunk($featuredproductss,4);
-      //    dd($featuredproductsschunk);
+        // dd($featuredproductsschunk);
       $latestproducts=Product::orderBy('created_at','DESC')->where('status',1)->limit(20)->get()->toArray();
         return view('Frontend.front.index')
         ->withbanners($banners)

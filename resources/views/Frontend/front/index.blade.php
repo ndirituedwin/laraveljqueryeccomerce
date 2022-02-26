@@ -7,8 +7,6 @@
     <div class="well well-small">
         <h4>Featured Products <small class="pull-right">{{$featuredproducts}} featured products</small></h4>
         <div class="row-fluid">
-            
-                
             <div id="featured" @if ($featuredproducts>4) class="carousel slide" @endif>
                 <div class="carousel-inner">
                     @if (!empty($featuredproductsschunk))
@@ -27,7 +25,7 @@
                                         <img src="{{asset('adminlte/adminimages/images/adminproducts/small/'.$item['productimage'])}}" alt="{{$item['productimage']}}">
                                    @else
                                    <img src="{{asset('adminlte/adminimages/noimage/noimage.jpg')}}" alt="{{$item['productimage']}}">
-      
+
                                         @endif
                                     <div class="caption">
                                         <h5>{{$item['productname']}}</h5>
@@ -44,24 +42,24 @@
                                         </span></h4>
                                         @if ($productdicountedprice>0)
                                         <h6><font color="red">Discounted price:{{$productdicountedprice}}</font></h6>
-                                            
+
                                         @endif
                                     </div>
                                        </a>
-  
+
                                 </div>
                             </li>
                               @endforeach
-                              
+
                           @endif
-                          
-                          
-                            
+
+
+
                         </ul>
                     </div>
                        @endforeach
                     @endif
-                    
+
                 </div>
                <!-- <a class="left carousel-control" href="#featured" data-slide="prev">‹</a>
                 <a class="right carousel-control" href="#featured" data-slide="next">›</a>-->
@@ -109,7 +107,7 @@
                                 {{$featured['productprice']}}
                             @endif
                         </a></h4>
-                        @if ($productdicountedprice>0)                               
+                        @if ($productdicountedprice>0)
                          <center>
                             <font color="red">Discounted price:{{$productdicountedprice}}</font>
                                                  </center>

@@ -42,7 +42,8 @@
                       @foreach ($categoriess as $section)
                           <optgroup label="{{$section->section}}"></optgroup>
                           @foreach ($section->Categories as $category)
-                          <option value="{{$category->id}}" @if (!empty(@old('category')) && $category->id==@old('category'))
+                          <option value="{{$category->id}}"
+                            @if (!empty(@old('category')) && $category->id==@old('category'))
                               selected=""
                           @endif style="background-color: green"> &raquo;{{$category->categoryname}}</option>
                           @if (!empty($category->subcategories))

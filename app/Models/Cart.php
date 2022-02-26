@@ -27,7 +27,7 @@ public static function usercartitems(){
     }
         return $usercartitems;
 
-     
+
 
 }
 public function product(){
